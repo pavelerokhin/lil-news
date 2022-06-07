@@ -1,0 +1,73 @@
+//visibility order
+$z-index-background: 1;
+$z-index-back: 10;
+$z-index-hidden: 0;
+$z-index-middle: 100;
+$z-index-front: 1000;
+$z-index-foreground: 5000;
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  cursor: url("/media/square_light.png") 3 3, auto;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: white;
+  border: 1px solid black;
+  border-radius: 3px;
+  cursor: url("/media/square_light.png") 3 3, auto;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: black;
+  cursor: url("/media/square_light.png") 3 3, auto;
+}
+
+* {
+  margin: 0;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+a {
+  text-decoration: none;
+
+  &:visited {
+    color: inherit;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+}
+
+ul {
+  padding: 0;
+}
+
+.container {
+  display: flex;
+}
+
