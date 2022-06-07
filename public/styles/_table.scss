@@ -1,0 +1,24 @@
+table {
+	width: 80%;
+	border-collapse: collapse;
+	overflow: hidden;
+	box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+th,
+td {
+	padding: 15px;
+	background-color: rgba(255,255,255,0.1);
+	color: #000;
+}
+
+th {
+    background-color: #e8735e;
+    text-align: left;
+}
+
+tr {
+    &:hover {
+        background-color: rgba(150,150,150,0.1);
+    }
+}
