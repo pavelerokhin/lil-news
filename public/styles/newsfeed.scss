@@ -1,0 +1,28 @@
+@import "utils";
+@import "media-utils";
+@import "table";
+
+.container {
+    padding: 10px;
+    width: 100%;
+
+    &>*:not(:first-child) {
+        margin-top: 5px;
+    }
+}
+
+#menu {
+    position: relative;
+    height: 50px;
+    width: 80%;
+
+    #csv-button {
+        position: absolute;
+        right: 0;
+
+        &:hover {
+            color: #e8735e;
+        }
+    }
+}
+
