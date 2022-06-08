@@ -16,7 +16,9 @@ type SQLiteRepo struct {
 }
 
 type Storage interface {
+	GetAllNews() []News
 	GetNewsByID(id int) *News
+	HasChanged() (bool, error)
 }
 
 func NewNewsRepo(dbFileName string, logger *log.Logger) (Storage, error) {
@@ -43,7 +45,19 @@ func NewNewsRepo(dbFileName string, logger *log.Logger) (Storage, error) {
 	return &SQLiteRepo{DB: sql, logger: logger}, nil
 }
 
-// GetNewsByID gets article with `id` from the SQLite DB
+// GetAllNews gets all news from DB
+func (r *SQLiteRepo) GetAllNews() []News {
+	r.logger.Printf("getting all news")
+	var news []News
+	tx := r.DB.Find(&news)
+	if tx.RowsAffected != 0 {
+		return news
+	}
+	r.logger.Printf("no articles found")
+	return nil
+}
+
+// GetNewsByID gets news with `id` from the SQLite DB
 func (r *SQLiteRepo) GetNewsByID(id int) *News {
 	r.logger.Printf("getting news with ID %d", id)
 	var news News
@@ -53,4 +67,32 @@ func (r *SQLiteRepo) GetNewsByID(id int) *News {
 	}
 	r.logger.Printf("news with ID %v not found", id)
 	return nil
+}
+
+var notFirstTime bool
+var oldCount int64
+
+// HasChanged returns `true` if DB has been changed
+func (r *SQLiteRepo) HasChanged() (bool, error) {
+	if !notFirstTime {
+		notFirstTime = true
+		return true, nil
+	}
+
+	var c int64
+	tx := r.DB.Raw("SELECT count() FROM news").Scan(&c)
+	if tx.Error != nil {
+		r.logger.Print(tx.Error)
+		return false, tx.Error
+	}
+	if c != oldCount {
+		oldCount = c
+		if notFirstTime {
+			return false, nil
+
+		}
+		return true, nil
+	}
+
+	return false, nil
 }
