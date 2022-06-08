@@ -2,11 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"net/http"
-	"time"
-
 	"github.com/labstack/echo/v4"
 	"golang.org/x/net/websocket"
+	"net/http"
+	"time"
 )
 
 func Index(c echo.Context) error {
@@ -16,19 +15,21 @@ func Index(c echo.Context) error {
 func NewsFeedWebSocketHandler(c echo.Context, db Storage) error {
 	websocket.Handler(func(ws *websocket.Conn) {
 		defer ws.Close()
-
-		if db != nil {
-			if hasChanged, err := db.HasChanged(); err == nil && hasChanged {
-				allNews := db.GetAllNews()
-				msg, err := json.Marshal(allNews)
-				if err != nil {
-					c.Logger().Error(err)
-				}
-				err = websocket.Message.Send(ws, string(msg))
-				if err != nil {
-					c.Logger().Error(err)
+		for {
+			if db != nil {
+				if hasChanged, err := db.HasChanged(); err == nil && hasChanged {
+					allNews := db.GetAllNews()
+					msg, err := json.Marshal(allNews)
+					if err != nil {
+						c.Logger().Error(err)
+					}
+					err = websocket.Message.Send(ws, string(msg))
+					if err != nil {
+						c.Logger().Error(err)
+					}
 				}
 			}
+			time.Sleep(time.Millisecond * 200)
 		}
 
 		//for {
@@ -46,7 +47,6 @@ func NewsFeedWebSocketHandler(c echo.Context, db Storage) error {
 		//}
 		//fmt.Printf("%s\n", msg)
 		//}
-		time.Sleep(time.Second * 2)
 
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil

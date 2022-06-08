@@ -69,15 +69,30 @@ func (r *SQLiteRepo) GetNewsByID(id int) *News {
 	return nil
 }
 
-type changes int
+var notFirstTime bool
+var oldCount int64
 
 // HasChanged returns `true` if DB has been changed
 func (r *SQLiteRepo) HasChanged() (bool, error) {
-	var c changes
-	tx := r.DB.Where("SELECT changes()").Find(&c)
+	if !notFirstTime {
+		notFirstTime = true
+		return true, nil
+	}
+
+	var c int64
+	tx := r.DB.Raw("SELECT count() FROM news").Scan(&c)
 	if tx.Error != nil {
 		r.logger.Print(tx.Error)
 		return false, tx.Error
 	}
-	return c != 0, nil
+	if c != oldCount {
+		oldCount = c
+		if notFirstTime {
+			return false, nil
+
+		}
+		return true, nil
+	}
+
+	return false, nil
 }
