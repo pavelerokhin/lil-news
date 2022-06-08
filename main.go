@@ -35,7 +35,7 @@ func main() {
 
 	e.Static("/", "public")
 
-	_, err := NewNewsRepo("newsfeed.db", l)
+	_, err := NewNewsRepo("newsfeed", l)
 	if err != nil {
 		l.Fatalf("error persistence: %s", err)
 	}
