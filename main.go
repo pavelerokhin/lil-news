@@ -11,8 +11,7 @@ import (
 )
 
 var (
-	db Storage
-	l  = log.New(os.Stdout, "lil-news ", log.LstdFlags|log.Lshortfile)
+	l = log.New(os.Stdout, "lil-news ", log.LstdFlags|log.Lshortfile)
 )
 
 type Template struct {
@@ -31,17 +30,19 @@ func main() {
 	e.Renderer = t
 
 	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	//e.Use(middleware.Recover())
 
 	e.Static("/", "public")
-
-	_, err := NewNewsRepo("newsfeed", l)
+	db, err := NewNewsRepo("newsfeed", l)
 	if err != nil {
 		l.Fatalf("error persistence: %s", err)
 	}
 
 	// Handlers
 	e.GET("/", Index)
-	e.GET("/ws", NewsFeedWebSocketHandler)
+	handler := func(c echo.Context) error {
+		return NewsFeedWebSocketHandler(c, db)
+	}
+	e.GET("/ws", handler)
 	e.Logger.Fatal(e.Start(":1111"))
 }
