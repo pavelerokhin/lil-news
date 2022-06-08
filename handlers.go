@@ -2,9 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"golang.org/x/net/websocket"
-	"net/http"
 )
 
 func Index(c echo.Context) error {
@@ -12,6 +13,7 @@ func Index(c echo.Context) error {
 }
 
 func NewsFeedWebSocketHandler(c echo.Context) error {
+
 	websocket.Handler(func(ws *websocket.Conn) {
 		defer ws.Close()
 
