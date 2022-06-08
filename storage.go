@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -23,7 +24,11 @@ func NewNewsRepo(dbFileName string, logger *log.Logger) (Storage, error) {
 		return &SQLiteRepo{}, fmt.Errorf("database name is empty")
 	}
 
-	sql, err := gorm.Open(sqlite.Open(fmt.Sprintf("database/%s.db", dbFileName)), &gorm.Config{
+	if !strings.HasPrefix(dbFileName, "db") {
+		dbFileName += ".db"
+	}
+
+	sql, err := gorm.Open(sqlite.Open(fmt.Sprintf("database/%s", dbFileName)), &gorm.Config{
 		Logger: glogger.Default.LogMode(glogger.Silent),
 	})
 	if err != nil {
