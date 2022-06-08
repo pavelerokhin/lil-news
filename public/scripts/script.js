@@ -24,8 +24,10 @@ function webSocketConnect() {
     };
 
     ws.onmessage = function (evt) {
-        let out = document.getElementById("output");
-        out.innerHTML = getTable(evt.data);
+        let t = new OutputTable("output", JSON.parse(evt.data));
+        t.createTable();
+        // let out = document.getElementById("output");
+        // out.innerHTML = getTable(evt.data);
     };
 }
 

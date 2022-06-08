@@ -18,7 +18,7 @@ type SQLiteRepo struct {
 type Storage interface {
 	GetAllNews() []News
 	GetNewsByID(id int) *News
-	HasChanged() (bool, error)
+	HasChanged(notFirstTime bool) (bool, error)
 }
 
 func NewNewsRepo(dbFileName string, logger *log.Logger) (Storage, error) {
@@ -69,11 +69,10 @@ func (r *SQLiteRepo) GetNewsByID(id int) *News {
 	return nil
 }
 
-var notFirstTime bool
 var oldCount int64
 
 // HasChanged returns `true` if DB has been changed
-func (r *SQLiteRepo) HasChanged() (bool, error) {
+func (r *SQLiteRepo) HasChanged(notFirstTime bool) (bool, error) {
 	if !notFirstTime {
 		notFirstTime = true
 		return true, nil
@@ -87,10 +86,10 @@ func (r *SQLiteRepo) HasChanged() (bool, error) {
 	}
 	if c != oldCount {
 		oldCount = c
-		if notFirstTime {
-			return false, nil
-
-		}
+		// if it is second time, but nothing has changed. In this way we initialize oldCount
+		//if notFirstTime {
+		//	return false, nil
+		//}
 		return true, nil
 	}
 

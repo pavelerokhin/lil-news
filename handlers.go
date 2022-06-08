@@ -15,21 +15,26 @@ func Index(c echo.Context) error {
 func NewsFeedWebSocketHandler(c echo.Context, db Storage) error {
 	websocket.Handler(func(ws *websocket.Conn) {
 		defer ws.Close()
+
+		if db == nil {
+			return
+		}
+
+		var notFirstTime bool
 		for {
-			if db != nil {
-				if hasChanged, err := db.HasChanged(); err == nil && hasChanged {
-					allNews := db.GetAllNews()
-					msg, err := json.Marshal(allNews)
-					if err != nil {
-						c.Logger().Error(err)
-					}
-					err = websocket.Message.Send(ws, string(msg))
-					if err != nil {
-						c.Logger().Error(err)
-					}
+			if hasChanged, err := db.HasChanged(notFirstTime); err == nil && hasChanged {
+				notFirstTime = true
+				allNews := db.GetAllNews()
+				msg, err := json.Marshal(allNews)
+				if err != nil {
+					c.Logger().Error(err)
+				}
+				err = websocket.Message.Send(ws, string(msg))
+				if err != nil {
+					c.Logger().Error(err)
 				}
 			}
-			time.Sleep(time.Millisecond * 200)
+			time.Sleep(time.Millisecond * 2000)
 		}
 
 		//for {
