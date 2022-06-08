@@ -36,7 +36,7 @@ var (
 
 type News struct {
 	gorm.Model
-	Categories  []Categories `gorm:"foreignKey:ID" json:"categories"`
+	Categories  []Categories `gorm:"foreignKey:CategoryID" json:"categories"`
 	Headline    string       `gorm:"headline" json:"headline"`
 	Image       string       `gorm:"image" json:"image"`
 	IsRelevant  int          `gorm:"isRelevant" json:"isRelevant"`
@@ -47,6 +47,6 @@ type News struct {
 
 type Categories struct {
 	gorm.Model
-	ID   uint
-	Name string
+	CategoryID uint
+	Name       string
 }

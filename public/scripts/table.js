@@ -81,12 +81,11 @@ class Table {
     }
 
     appendToSearch() {
-        let search = $(`#${this.tableContainerId}Search`);
+        let search = document.getElementById("table-search");
         // if search field exists, we band it to the table
-        if (search.length == 0) {
+        if (!search) {
             return;
         }
-        search = search[0];
         search.onkeyup = ""; // hack
         let that = this;
         search.addEventListener("keyup",
@@ -100,8 +99,6 @@ class Table {
         this.addHeader();
         this.addBody();
         this.appendToSearch();
-        // add classes
-        this.table.setAttribute("class", "table");
     }
 
     deleteTable() {
@@ -109,16 +106,14 @@ class Table {
     }
 
     searchFilter(search) {
+        debugger;
         if (search.value != "") {
-            for (let data of this.dataObject.data) {
+            for (let data of this.dataObject) {
                 let dataTextualize = JSON.stringify(Object.values(data)).replace(/[\"\[\]]/g, "").replace("false", "").replace("true", "");
-                data.show = true;
-                if (dataTextualize.indexOf(search.value) == -1) {
-                    data.show = false;
-                }
+                data.show = dataTextualize.indexOf(search.value) !== -1;
             }
         } else {
-            for (let data of this.dataObject.data) {
+            for (let data of this.dataObject) {
                 data.show = true;
             }
         }
@@ -132,7 +127,8 @@ class Table {
     }
 
     refreshBody() {
-        $(this.table).find("tbody").remove();
+        debugger;
+        this.table.getElementsByTagName("tbody")[0].remove();
         this.addBody();
     }
 
@@ -141,7 +137,7 @@ class Table {
 class InputTable extends Table {
     constructor(tableContainerId, dataObject) {
         super(tableContainerId, dataObject);
-        this.tableConfig = globalVariables.inputTableRepresentation[this.tableContainerId]; // global configuration object
+        this.tableConfig = tableConfig;
     }
 
     addRow(body, rowData) {
@@ -180,7 +176,7 @@ class OutputTable extends Table {
     constructor(tableContainerId, dataObjectFromServer) {
         super(tableContainerId, dataObjectFromServer);
         // TODO: if it is an output table we take this config   
-        this.tableConfig = globalVariables.outputTableRepresentation[this.tableContainerId]; // global configuration object
+        this.tableConfig = tableConfig; // global configuration object
     }
 
     addRow(body, rowData) {
@@ -195,6 +191,10 @@ class OutputTable extends Table {
             return;
         }
 
+        if (rowData.show !== undefined && !rowData.show) {
+            return;
+        }
+
         const dispatchCallbackFunction = function(rowData) {
             return function() {
                 ajax.dispatchDetail(areaLinked, rowData);
@@ -206,22 +206,22 @@ class OutputTable extends Table {
             cell.innerHTML = row.rowIndex;
         }
 
-        for (let hc of headerConfig.filter(h => { return h.show || h.show == undefined })) {
+        for (let hc of headerConfig.filter(h => { return h.show || h.show === undefined })) {
             // add cell from backend
             cell = row.insertCell(cellId++);
 
             // add configuration button
             // in this if we will add all the cells that will not riderect the page
-            if (hc.configurationButton) {
-                let configureBotton = document.createElement('a');
-                configureBotton.innerHTML = "<img src='etc/img/edit.png' type='botton' onclick='configurationModal()' alt='configure link' style='width:20px; height:20px;'>";
-                cell.appendChild(configureBotton);
-                continue;
-            }
+            // if (hc.configurationButton) {
+            //     let configureBotton = document.createElement('a');
+            //     configureBotton.innerHTML = "<img src='etc/img/edit.png' type='botton' onclick='configurationModal()' alt='configure link' style='width:20px; height:20px;'>";
+            //     cell.appendChild(configureBotton);
+            //     continue;
+            // }
 
             cell.innerHTML = getValueToInsert(rowData, hc.backendKey, hc.isToHumanize);
 
-            if (rowData.ID != undefined && !this.tableConfig.noRiderect) {
+            if (rowData.ID !== undefined && !this.tableConfig.noRiderect) {
                 cell.addEventListener("click", dispatchCallbackFunction, true);
             }
         }
@@ -232,7 +232,7 @@ class OutputTable extends Table {
 // static utility functions
 function getValueToInsert(rowData, backendKey, isTohumaniseFileSize) {
     dataToInsert = rowData[backendKey];
-    if (dataToInsert != undefined && isTohumaniseFileSize) {
+    if (dataToInsert !== undefined && isTohumaniseFileSize) {
         return utils.humaniseFileSize(dataToInsert);
     }
     return dataToInsert;
@@ -244,4 +244,38 @@ function sortOnjectByFieldName(objectFromServer, backendKey, ascSorting) {
         return objectFromServer.sort((a, b) => (a[backendKey] > b[backendKey]) ? 1 : ((b[backendKey] > a[backendKey]) ? -1 : 0))
     }
     return objectFromServer.sort((a, b) => (a[backendKey] < b[backendKey]) ? 1 : ((b[backendKey] < a[backendKey]) ? -1 : 0))
+}
+
+var tableConfig = {
+    headers: [{
+            backendKey: "categories",
+            headerCapture: "Categories",
+            sortingAsc: null
+        },
+        {
+            backendKey: "headline",
+            headerCapture: "Headline",
+            sortingAsc: null
+        },
+        {
+            backendKey: "image",
+            headerCapture: "Image",
+            sortingAsc: null
+        },
+        {
+            backendKey: "location",
+            headerCapture: "Location",
+            sortingAsc: null
+        },
+        {
+            backendKey: "publishDate",
+            headerCapture: "Date",
+            sortingAsc: null
+        },
+        {
+            backendKey: "severity",
+            headerCapture: "Severity",
+            sortingAsc: null,
+        },
+    ],
 }

@@ -30,7 +30,7 @@ func main() {
 	e.Renderer = t
 
 	e.Use(middleware.Logger())
-	//e.Use(middleware.Recover())
+	e.Use(middleware.Recover())
 
 	e.Static("/", "public")
 	db, err := NewNewsRepo("newsfeed", l)

@@ -25,12 +25,6 @@
   margin: 0;
   padding: 0;
   font-family: "Futura Lt BT", sans-serif !important;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
 }
@@ -57,11 +51,6 @@ ul {
   padding: 0;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-}
-
 table {
   width: 80%;
   border-collapse: collapse;
@@ -76,7 +65,7 @@ td {
   color: #000;
 }
 
-th {
+thead td {
   background-color: #e8735e;
   text-align: left;
 }
@@ -87,7 +76,6 @@ tr:hover {
 
 .container {
   padding: 10px;
-  width: 100%;
 }
 .container > *:not(:first-child) {
   margin-top: 5px;
