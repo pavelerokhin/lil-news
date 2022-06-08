@@ -2,10 +2,17 @@ package main
 
 import (
 	"io"
+	"log"
+	"os"
 	"text/template"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+)
+
+var (
+	db Storage
+	l  = log.New(os.Stdout, "lil-news ", log.LstdFlags|log.Lshortfile)
 )
 
 type Template struct {
@@ -28,6 +35,12 @@ func main() {
 
 	e.Static("/", "public")
 
+	_, err := NewNewsRepo("newsfeed.db", l)
+	if err != nil {
+		l.Fatalf("error persistence: %s", err)
+	}
+
+	// Handlers
 	e.GET("/", Index)
 	e.GET("/ws", NewsFeedWebSocketHandler)
 	e.Logger.Fatal(e.Start(":1111"))

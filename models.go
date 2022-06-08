@@ -1,11 +1,14 @@
 package main
 
-import "time"
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
 var (
 	news = []News{
 		{
-			Categories:  []string{"x", "y", "z"},
+			Categories:  []Categories{{Name: "x"}, {Name: "y"}, {Name: "z"}},
 			Headline:    "headline 1",
 			Image:       "path to image 1",
 			Location:    "Berlin",
@@ -13,7 +16,7 @@ var (
 			Severity:    0,
 		},
 		{
-			Categories:  []string{"x"},
+			Categories:  []Categories{{Name: "x"}},
 			Headline:    "headline 2",
 			Image:       "path to image 2",
 			Location:    "Paris",
@@ -21,7 +24,7 @@ var (
 			Severity:    0,
 		},
 		{
-			Categories:  []string{"y", "z"},
+			Categories:  []Categories{{Name: "y"}, {Name: "z"}},
 			Headline:    "headline 3",
 			Image:       "path to image 3",
 			Location:    "Milan",
@@ -32,11 +35,18 @@ var (
 )
 
 type News struct {
-	Categories  []string  `json:"categories"`
-	Headline    string    `json:"headline"`
-	Image       string    `json:"image"`
-	IsRelevant  int       `json:"isRelevant"`
-	Location    string    `json:"location"`
-	PublishDate time.Time `json:"publishDate"`
-	Severity    int       `json:"severity"`
+	gorm.Model
+	Categories  []Categories `gorm:"foreignKey:ID" json:"categories"`
+	Headline    string       `gorm:"headline" json:"headline"`
+	Image       string       `gorm:"image" json:"image"`
+	IsRelevant  int          `gorm:"isRelevant" json:"isRelevant"`
+	Location    string       `gorm:"location" json:"location"`
+	PublishDate time.Time    `gorm:"publishDate" json:"publishDate"`
+	Severity    int          `gorm:"severity" json:"severity"`
+}
+
+type Categories struct {
+	gorm.Model
+	ID   uint
+	Name string
 }
