@@ -4,27 +4,46 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/net/websocket"
+	"log"
 	"net/http"
 	"time"
 )
 
-func Index(c echo.Context) error {
+type handlers struct {
+	logger  *log.Logger
+	storage Storage
+}
+
+func getHandlers(l *log.Logger, s Storage) *handlers {
+	return &handlers{
+		logger:  l,
+		storage: s,
+	}
+}
+
+//type Handlers interface {
+//	IndexPage(c echo.Context) error
+//	NewsFeedWebSocketHandler(c echo.Context, db Storage) error
+//}
+
+func (h *handlers) IndexPage(c echo.Context) error {
 	return c.Render(http.StatusOK, "newsfeed", "")
 }
 
-func NewsFeedWebSocketHandler(c echo.Context, db Storage) error {
+func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 	websocket.Handler(func(ws *websocket.Conn) {
 		defer ws.Close()
 
-		if db == nil {
+		if s == nil {
 			return
 		}
 
 		var notFirstTime bool
 		for {
-			if hasChanged, err := db.HasChanged(notFirstTime); err == nil && hasChanged {
+			if hasChanged, err := s.HasChanged(notFirstTime); err == nil && hasChanged {
 				notFirstTime = true
-				allNews := db.GetAllNews()
+				log.Println("there has been changes in the DB, write to socket")
+				allNews := s.GetAllNews()
 				msg, err := json.Marshal(allNews)
 				if err != nil {
 					c.Logger().Error(err)

@@ -12,6 +12,8 @@ import (
 
 var (
 	l = log.New(os.Stdout, "lil-news ", log.LstdFlags|log.Lshortfile)
+	s = NewNewsSQLiteRepo("newsfeed", l)
+	h = getHandlers(l, s)
 )
 
 type Template struct {
@@ -31,18 +33,10 @@ func main() {
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-
 	e.Static("/", "public")
-	db, err := NewNewsRepo("newsfeed", l)
-	if err != nil {
-		l.Fatalf("error persistence: %s", err)
-	}
 
 	// Handlers
-	e.GET("/", Index)
-	handler := func(c echo.Context) error {
-		return NewsFeedWebSocketHandler(c, db)
-	}
-	e.GET("/ws", handler)
+	e.GET("/", h.IndexPage)
+	e.GET("/ws", h.NewsFeedWebSocketHandler)
 	e.Logger.Fatal(e.Start(":1111"))
 }

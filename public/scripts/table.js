@@ -109,8 +109,8 @@ class Table {
         debugger;
         if (search.value !== "") {
             for (let data of this.dataObject) {
-                let dataTextualize = JSON.stringify(Object.values(data)).replace(/[\"\[\]]/g, "").replace("false", "").replace("true", "");
-                data.show = dataTextualize.indexOf(search.value) !== -1;
+                let dataTextual = JSON.stringify(Object.values(data)).replace(/[\"\[\]]/g, "").replace("false", "").replace("true", "");
+                data.show = dataTextual.indexOf(search.value) !== -1;
             }
         } else {
             for (let data of this.dataObject) {
