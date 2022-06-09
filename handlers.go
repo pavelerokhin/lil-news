@@ -6,6 +6,7 @@ import (
 	"golang.org/x/net/websocket"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -21,8 +22,41 @@ func getHandlers(l *log.Logger, s Storage) *handlers {
 	}
 }
 
+func (h *handlers) DownloadCSV(c echo.Context) error {
+	return c.Render(http.StatusOK, "newsfeed", "")
+}
+
 func (h *handlers) IndexPage(c echo.Context) error {
 	return c.Render(http.StatusOK, "newsfeed", "")
+}
+
+func (h *handlers) Insert(c echo.Context) error {
+	s, err := strconv.Atoi(c.FormValue("severity"))
+	if err != nil {
+		return c.String(http.StatusConflict, "KO")
+	}
+
+	err = h.storage.AddNews(&News{
+		Categories:  nil,
+		Headline:    c.FormValue("headline"),
+		Image:       c.FormValue("image"),
+		Location:    c.FormValue("location"),
+		PublishDate: c.FormValue("date"),
+		Severity:    s,
+	})
+	if err != nil {
+		return c.String(http.StatusConflict, "KO")
+	}
+	return c.String(http.StatusOK, "OK")
+}
+
+func (h *handlers) InsertRandom(c echo.Context) error {
+	n := generateNews()
+	err := h.storage.AddNews(n)
+	if err != nil {
+		return c.String(http.StatusConflict, "KO, random")
+	}
+	return c.String(http.StatusOK, "OK, random")
 }
 
 func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
