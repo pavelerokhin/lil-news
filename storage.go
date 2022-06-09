@@ -16,6 +16,7 @@ type SQLiteRepo struct {
 }
 
 type Storage interface {
+	AddNews(n *News) error
 	GetAllNews() []News
 	GetNewsByID(id int) *News
 	HasChanged(notFirstTime bool) (bool, error)
@@ -46,6 +47,17 @@ func NewNewsSQLiteRepo(dbFileName string, logger *log.Logger) Storage {
 	}
 	logger.Printf("connected to SQLite database %s", dbFileName)
 	return &SQLiteRepo{DB: sql, logger: logger}
+}
+
+// AddNews add news to DB
+func (r *SQLiteRepo) AddNews(n *News) error {
+	r.logger.Printf("adding news %s", n)
+	tx := r.DB.Create(n)
+	if tx.Error != nil {
+		r.logger.Printf("error saving medium %e", tx.Error)
+		return tx.Error
+	}
+	return nil
 }
 
 // GetAllNews gets all news from DB
