@@ -40,7 +40,7 @@ func main() {
 	e.GET("/ws", h.NewsFeedWebSocketHandler)
 	e.GET("/csv", h.DownloadCSV)
 	e.POST("/insert", h.Insert)
-	e.POST("/insert-random", h.InsertRandom)
+	e.POST("/insert-random", h.InsertRandom) // curl -X POST http://localhost:1111/insert-random
 
 	e.Logger.Fatal(e.Start(":1111"))
 }
