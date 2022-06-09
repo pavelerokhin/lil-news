@@ -121,7 +121,7 @@ class Table {
 
     sortTableBodyByBackendKey(backendKey, sortingAsc) {
         this.deleteTable();
-        this.dataObject = sortOnjectByFieldName(this.dataObject, backendKey, sortingAsc);
+        this.dataObject = sortObjectByFieldName(this.dataObject, backendKey, sortingAsc);
         this.createTable();
     }
 
@@ -166,7 +166,7 @@ class InputTable extends Table {
                 });
                 continue;
             }
-            cell.innerHTML = getValueToInsert(rowData, hc.backendKey, hc.isToHumanize);
+            cell.innerHTML = rowData[hc.backendKey];
         }
     }
 }
@@ -209,13 +209,24 @@ class OutputTable extends Table {
             cell = row.insertCell(cellId++);
 
             if (hc.isImage) {
-                let imgUrl = getValueToInsert(rowData, hc.backendKey, false)
-                debugger;
+                let imgUrl = rowData[hc.backendKey];
                 if (!imgUrl) {
                     cell.innerHTML = "no image"
                     continue;
                 }
                 cell.innerHTML = `<img src='${imgUrl}' alt='' style='width:40px; height:40px;'>`;
+                continue;
+            }
+
+            if (hc.isDate) {
+                try {
+                    let d = new Date(rowData[hc.backendKey]);
+                    cell.innerHTML = `<span class="date">${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}</span>` +
+                        `<span class="time">${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}</span>`;
+                } catch (e) {
+                    console.warn("cannot parse date", e);
+                    cell.innerHTML = rowData[hc.backendKey];
+                }
                 continue;
             }
 
@@ -228,7 +239,7 @@ class OutputTable extends Table {
             //     continue;
             // }
 
-            cell.innerHTML = getValueToInsert(rowData, hc.backendKey, hc.isToHumanize);
+            cell.innerHTML = rowData[hc.backendKey];
 
             // if (rowData.ID !== undefined && !this.tableConfig.noRiderect) {
             //     cell.addEventListener("click", dispatchCallbackFunction, true);
@@ -238,16 +249,7 @@ class OutputTable extends Table {
 
 }
 
-// static utility functions
-function getValueToInsert(rowData, backendKey, isTohumaniseFileSize) {
-    dataToInsert = rowData[backendKey];
-    if (dataToInsert !== undefined && isTohumaniseFileSize) {
-        return utils.humaniseFileSize(dataToInsert);
-    }
-    return dataToInsert;
-}
-
-function sortOnjectByFieldName(objectFromServer, backendKey, ascSorting) {
+function sortObjectByFieldName(objectFromServer, backendKey, ascSorting) {
     if (ascSorting) {
 
         return objectFromServer.sort((a, b) => (a[backendKey] > b[backendKey]) ? 1 : ((b[backendKey] > a[backendKey]) ? -1 : 0))
@@ -281,7 +283,8 @@ var tableConfig = {
         {
             backendKey: "publishDate",
             headerCapture: "Date",
-            sortingAsc: null
+            sortingAsc: null,
+            isDate: true
         },
         {
             backendKey: "severity",
