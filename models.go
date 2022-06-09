@@ -2,7 +2,6 @@ package main
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 var (
@@ -12,7 +11,7 @@ var (
 			Headline:    "headline 1",
 			Image:       "path to image 1",
 			Location:    "Berlin",
-			PublishDate: time.Now().UTC(),
+			PublishDate: "",
 			Severity:    0,
 		},
 		{
@@ -20,7 +19,7 @@ var (
 			Headline:    "headline 2",
 			Image:       "path to image 2",
 			Location:    "Paris",
-			PublishDate: time.Now().UTC(),
+			PublishDate: "",
 			Severity:    0,
 		},
 		{
@@ -28,7 +27,7 @@ var (
 			Headline:    "headline 3",
 			Image:       "path to image 3",
 			Location:    "Milan",
-			PublishDate: time.Now().UTC(),
+			PublishDate: "",
 			Severity:    0,
 		},
 	}
@@ -41,7 +40,7 @@ type News struct {
 	Image       string       `gorm:"image" json:"image"`
 	IsRelevant  int          `gorm:"isRelevant" json:"isRelevant"`
 	Location    string       `gorm:"location" json:"location"`
-	PublishDate time.Time    `gorm:"publishDate" json:"publishDate"`
+	PublishDate string       `gorm:"publishDate" json:"publishDate"`
 	Severity    int          `gorm:"severity" json:"severity"`
 }
 
