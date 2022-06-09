@@ -21,9 +21,10 @@ type Storage interface {
 	HasChanged(notFirstTime bool) (bool, error)
 }
 
-func NewNewsRepo(dbFileName string, logger *log.Logger) (Storage, error) {
+func NewNewsSQLiteRepo(dbFileName string, logger *log.Logger) Storage {
 	if dbFileName == "" {
-		return &SQLiteRepo{}, fmt.Errorf("database name is empty")
+		logger.Printf("error: database name cannot be empty")
+		return &SQLiteRepo{}
 	}
 
 	if !strings.HasPrefix(dbFileName, "db") {
@@ -34,15 +35,17 @@ func NewNewsRepo(dbFileName string, logger *log.Logger) (Storage, error) {
 		Logger: glogger.Default.LogMode(glogger.Silent),
 	})
 	if err != nil {
-		return &SQLiteRepo{}, err
+		logger.Printf("error: cannot connect to the database")
+		return &SQLiteRepo{}
 	}
 
 	err = sql.AutoMigrate(&News{})
 	if err != nil {
-		return &SQLiteRepo{}, err
+		logger.Printf("error: cannot automigrate model to the database")
+		return &SQLiteRepo{}
 	}
-
-	return &SQLiteRepo{DB: sql, logger: logger}, nil
+	logger.Printf("connected to SQLite database %s", dbFileName)
+	return &SQLiteRepo{DB: sql, logger: logger}
 }
 
 // GetAllNews gets all news from DB
@@ -51,6 +54,7 @@ func (r *SQLiteRepo) GetAllNews() []News {
 	var news []News
 	tx := r.DB.Find(&news)
 	if tx.RowsAffected != 0 {
+		r.logger.Printf("%d articles found", tx.RowsAffected)
 		return news
 	}
 	r.logger.Printf("no articles found")
