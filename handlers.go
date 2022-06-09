@@ -37,7 +37,7 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 		for {
 			if hasChanged, err := s.HasChanged(notFirstTime); err == nil && hasChanged {
 				notFirstTime = true
-				log.Println("there has been changes in the DB, write to socket")
+				h.logger.Println("there has been changes in the DB, write to socket")
 				allNews := s.GetAllNews()
 				msg, err := json.Marshal(allNews)
 				if err != nil {
@@ -48,7 +48,7 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 					c.Logger().Error(err)
 				}
 			}
-			time.Sleep(time.Millisecond * 2000)
+			time.Sleep(time.Millisecond * 500)
 		}
 
 		//for {

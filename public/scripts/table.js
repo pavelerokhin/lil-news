@@ -51,24 +51,23 @@ class Table {
         }
 
         //inserting cells from tableConfig
-        headerConfig.filter(h => { return h.show || h.show == undefined }).forEach(hc => {
+        headerConfig && headerConfig.filter(h => { return h.show || h.show === undefined }).forEach(hc => {
             let cell = row.insertCell(cellId++);
-            cell.innerHTML = hc.headerCapture + (hc.sortingAsc != undefined ? (hc.sortingAsc ? " ^" : " v") : "");
+            cell.innerHTML = hc.headerCapture + (hc.sortingAsc !== undefined ? (hc.sortingAsc ? " ^" : " v") : "");
 
-            // TODO: make it function
+            // TODO: make it a function
             // add sorting event
             if (!hc.noSotring) {
                 let that = this;
                 cell.addEventListener('click', () => {
                     headerConfig.forEach(el => {
-                        if (el.backendKey != hc.backendKey) {
+                        if (el.backendKey !== hc.backendKey) {
                             el.sortingAsc = undefined;
                         }
                     });
-                    if (hc.sortingAsc == undefined) {
+                    if (hc.sortingAsc === null) { // if wasn't set in the configuration
                         hc.sortingAsc = true;
                     }
-                    // TODO: see if this.tableContainer.id can be stortcutted by this.tableContainerId
                     that.sortTableBodyByBackendKey(hc.backendKey, hc.sortingAsc);
                     hc.sortingAsc = !hc.sortingAsc;
                 });
@@ -122,7 +121,7 @@ class Table {
 
     sortTableBodyByBackendKey(backendKey, sortingAsc) {
         this.deleteTable();
-        this.dataObject.data = sortOnjectByFieldName(this.dataObject.data, backendKey, sortingAsc);
+        this.dataObject = sortOnjectByFieldName(this.dataObject, backendKey, sortingAsc);
         this.createTable();
     }
 
@@ -155,14 +154,14 @@ class InputTable extends Table {
         }
 
         let that = this;
-        for (let hc of headerConfig.filter(h => { return h.show || h.show == undefined })) {
+        for (let hc of headerConfig.filter(h => { return h.show || h.show === undefined })) {
             let cell = row.insertCell(cellId++);
             if (hc.deleteButton) {
                 let idToDelete = rowData._id;
                 cell.innerHTML = "&#10754;";
                 cell.classList.add("delete-button");
                 cell.addEventListener("click", function() {
-                    that.dataObject = that.dataObject.filter(d => { return d._id != idToDelete });
+                    that.dataObject = that.dataObject.filter(d => { return d._id !== idToDelete });
                     that.refreshBody();
                 });
                 continue;
@@ -180,7 +179,6 @@ class OutputTable extends Table {
     }
 
     addRow(body, rowData) {
-        let areaLinked = this.tableConfig.areaLinked;
         const headerConfig = this.tableConfig.headers;
 
         let cellId = 0;
@@ -195,11 +193,11 @@ class OutputTable extends Table {
             return;
         }
 
-        const dispatchCallbackFunction = function(rowData) {
-            return function() {
-                ajax.dispatchDetail(areaLinked, rowData);
-            }
-        }(rowData);
+        // const dispatchCallbackFunction = function(rowData) {
+        //     return function() {
+        //         ajax.dispatchDetail(areaLinked, rowData);
+        //     }
+        // }(rowData);
 
         if (this.tableConfig.idRequested) {
             cell = row.insertCell(cellId++);
@@ -207,8 +205,19 @@ class OutputTable extends Table {
         }
 
         for (let hc of headerConfig.filter(h => { return h.show || h.show === undefined })) {
-            // add cell from backend
+            // add cell from the backend
             cell = row.insertCell(cellId++);
+
+            if (hc.isImage) {
+                let imgUrl = getValueToInsert(rowData, hc.backendKey, false)
+                debugger;
+                if (!imgUrl) {
+                    cell.innerHTML = "no image"
+                    continue;
+                }
+                cell.innerHTML = `<img src='${imgUrl}' alt='' style='width:40px; height:40px;'>`;
+                continue;
+            }
 
             // add configuration button
             // in this if we will add all the cells that will not riderect the page
@@ -221,9 +230,9 @@ class OutputTable extends Table {
 
             cell.innerHTML = getValueToInsert(rowData, hc.backendKey, hc.isToHumanize);
 
-            if (rowData.ID !== undefined && !this.tableConfig.noRiderect) {
-                cell.addEventListener("click", dispatchCallbackFunction, true);
-            }
+            // if (rowData.ID !== undefined && !this.tableConfig.noRiderect) {
+            //     cell.addEventListener("click", dispatchCallbackFunction, true);
+            // }
         }
     }
 
@@ -260,7 +269,9 @@ var tableConfig = {
         {
             backendKey: "image",
             headerCapture: "Image",
-            sortingAsc: null
+            sortingAsc: null,
+            isImage: true,
+            noSorting: true
         },
         {
             backendKey: "location",
