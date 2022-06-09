@@ -21,11 +21,6 @@ func getHandlers(l *log.Logger, s Storage) *handlers {
 	}
 }
 
-//type Handlers interface {
-//	IndexPage(c echo.Context) error
-//	NewsFeedWebSocketHandler(c echo.Context, db Storage) error
-//}
-
 func (h *handlers) IndexPage(c echo.Context) error {
 	return c.Render(http.StatusOK, "newsfeed", "")
 }
