@@ -22,6 +22,19 @@ func getHandlers(l *log.Logger, s Storage) *handlers {
 	}
 }
 
+func (h *handlers) Delete(c echo.Context) error {
+	id, err := strconv.Atoi(c.FormValue("id"))
+	if err != nil {
+		return c.String(http.StatusConflict, "KO")
+	}
+
+	err = h.storage.Delete(id)
+	if err != nil {
+		return c.String(http.StatusConflict, "KO")
+	}
+	return c.String(http.StatusOK, "OK")
+}
+
 func (h *handlers) DownloadCSV(c echo.Context) error {
 	return c.Render(http.StatusOK, "newsfeed", "")
 }

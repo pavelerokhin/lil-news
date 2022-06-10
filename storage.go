@@ -17,6 +17,7 @@ type SQLiteRepo struct {
 
 type Storage interface {
 	AddNews(n *News) error
+	Delete(id int) error
 	GetAllNews() []News
 	GetNewsByID(id int) *News
 	HasChanged(notFirstTime bool) (bool, error)
@@ -47,6 +48,24 @@ func NewNewsSQLiteRepo(dbFileName string, logger *log.Logger) Storage {
 	}
 	logger.Printf("connected to SQLite database %s", dbFileName)
 	return &SQLiteRepo{DB: sql, logger: logger}
+}
+
+func (r *SQLiteRepo) Delete(id int) error {
+	var n News
+
+	tx := r.DB.Where("id = ?", id).Find(&n)
+	if tx.RowsAffected != 0 {
+		tx = r.DB.Delete(&n)
+
+		if tx.Error != nil {
+			return fmt.Errorf("error while deleting news with ID %d: %s", id, tx.Error)
+		}
+		r.logger.Printf("news with ID %v has been deleted successfully", id)
+	} else {
+		r.logger.Printf("cannot find news with ID %d", id)
+	}
+
+	return nil
 }
 
 // AddNews add news to DB

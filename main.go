@@ -37,8 +37,9 @@ func main() {
 
 	// Handlers
 	e.GET("/", h.IndexPage)
-	e.GET("/ws", h.NewsFeedWebSocketHandler)
 	e.GET("/csv", h.DownloadCSV)
+	e.GET("/ws", h.NewsFeedWebSocketHandler)
+	e.POST("/delete", h.Delete) // curl -X POST http://localhost:1111/delete -d "id=1"
 	e.POST("/insert", h.Insert)
 	e.POST("/insert-random", h.InsertRandom) // curl -X POST http://localhost:1111/insert-random
 
