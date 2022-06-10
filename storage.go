@@ -11,8 +11,9 @@ import (
 )
 
 type SQLiteRepo struct {
-	DB     *gorm.DB
-	logger *log.Logger
+	DB               *gorm.DB
+	logger           *log.Logger
+	newChangesInRepo bool
 }
 
 type Storage interface {
@@ -20,7 +21,7 @@ type Storage interface {
 	Delete(id int) error
 	GetAllNews() []News
 	GetNewsByID(id int) *News
-	HasChanged(notFirstTime bool) (bool, error)
+	ReceiveNewChanges() bool
 }
 
 func NewNewsSQLiteRepo(dbFileName string, logger *log.Logger) Storage {
@@ -60,6 +61,7 @@ func (r *SQLiteRepo) Delete(id int) error {
 		if tx.Error != nil {
 			return fmt.Errorf("error while deleting news with ID %d: %s", id, tx.Error)
 		}
+		r.newChangesInRepo = true
 		r.logger.Printf("news with ID %v has been deleted successfully", id)
 	} else {
 		r.logger.Printf("cannot find news with ID %d", id)
@@ -76,6 +78,7 @@ func (r *SQLiteRepo) AddNews(n *News) error {
 		r.logger.Printf("error saving medium %e", tx.Error)
 		return tx.Error
 	}
+	r.newChangesInRepo = true
 	return nil
 }
 
@@ -104,29 +107,11 @@ func (r *SQLiteRepo) GetNewsByID(id int) *News {
 	return nil
 }
 
-var oldCount int64
-
-// HasChanged returns `true` if DB has been changed
-func (r *SQLiteRepo) HasChanged(notFirstTime bool) (bool, error) {
-	if !notFirstTime {
-		notFirstTime = true
-		return true, nil
+// ReceiveNewChanges returns `true` if DB has been changed and changes the internal state of storage
+func (r *SQLiteRepo) ReceiveNewChanges() bool {
+	if r.newChangesInRepo {
+		r.newChangesInRepo = false
+		return true
 	}
-
-	var c int64
-	tx := r.DB.Raw("SELECT count() FROM news").Scan(&c)
-	if tx.Error != nil {
-		r.logger.Print(tx.Error)
-		return false, tx.Error
-	}
-	if c != oldCount {
-		oldCount = c
-		// if it is second time, but nothing has changed. In this way we initialize oldCount
-		//if notFirstTime {
-		//	return false, nil
-		//}
-		return true, nil
-	}
-
-	return false, nil
+	return false
 }

@@ -80,10 +80,11 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 			return
 		}
 
-		var notFirstTime bool
+		firstTime := true
+
 		for {
-			if hasChanged, err := s.HasChanged(notFirstTime); err == nil && hasChanged {
-				notFirstTime = true
+			if firstTime || s.ReceiveNewChanges() {
+				firstTime = false
 				h.logger.Println("there has been changes in the DB, write to socket")
 				allNews := s.GetAllNews()
 				msg, err := json.Marshal(allNews)
@@ -97,13 +98,6 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 			}
 			time.Sleep(time.Millisecond * 500)
 		}
-
-		//for {
-		// Write
-		//err := websocket.Message.Send(ws, "Hello, Client!")
-		//if err != nil {
-		//	c.Logger().Error(err)
-		//}
 
 		// Read
 		//msg := ""
