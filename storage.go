@@ -21,7 +21,7 @@ type Storage interface {
 	Delete(id int) error
 	GetAllNews() []News
 	GetNewsByID(id int) *News
-	ReceiveNewChanges() bool
+	HasChanges() bool
 }
 
 func NewNewsSQLiteRepo(dbFileName string, logger *log.Logger) Storage {
@@ -107,8 +107,8 @@ func (r *SQLiteRepo) GetNewsByID(id int) *News {
 	return nil
 }
 
-// ReceiveNewChanges returns `true` if DB has been changed and changes the internal state of storage
-func (r *SQLiteRepo) ReceiveNewChanges() bool {
+// HasChanges returns `true` if DB has been changed and changes the internal state of storage
+func (r *SQLiteRepo) HasChanges() bool {
 	if r.newChangesInRepo {
 		r.newChangesInRepo = false
 		return true

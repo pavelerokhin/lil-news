@@ -83,7 +83,7 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 		firstTime := true
 
 		for {
-			if firstTime || s.ReceiveNewChanges() {
+			if firstTime || s.HasChanges() {
 				firstTime = false
 				h.logger.Println("there has been changes in the DB, write to socket")
 				allNews := s.GetAllNews()
