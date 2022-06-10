@@ -35,6 +35,13 @@ func RandImage() string {
 	return fmt.Sprintf("images/%s", images[rand.Intn(len(images))])
 }
 
+func RandLink() string {
+	if rand.Intn(2) == 0 {
+		return ""
+	}
+	return "www.google.com"
+}
+
 func RandLocation() string {
 	return locations[rand.Intn(len(locations))]
 }
@@ -55,6 +62,7 @@ func generateNews() *News {
 	return &News{
 		Headline:    RandString(rand.Intn(100)+1, true),
 		Image:       RandImage(),
+		Link:        RandLink(),
 		Location:    RandLocation(),
 		PublishDate: t.String(),
 		Severity:    rand.Intn(5) + 1,

@@ -64,10 +64,19 @@ td {
   background-color: rgba(255, 255, 255, 0.1);
   color: #000;
 }
+th a, th a:visited,
+td a,
+td a:visited {
+  color: blue;
+}
 th .time,
 td .time {
   color: grey;
   margin-left: 30px;
+}
+th .no-link,
+td .no-link {
+  color: grey;
 }
 
 thead td {
