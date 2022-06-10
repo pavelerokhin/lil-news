@@ -3,22 +3,33 @@ package main
 import (
 	"fmt"
 	"golang.org/x/text/language"
+	"io/ioutil"
 	"math/rand"
 	"time"
 
 	"golang.org/x/text/cases"
 )
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
 var (
 	caser       = cases.Title(language.English)
-	images      = []string{"1.png", "2.png"}
+	images      []string
 	letterRunes = []rune("abcdefghijklmnopqrstuvwxyz    ")
 	locations   = []string{"Madrid", "Minsk", "Monaco", "Moscow", "Nicosia", "Nuuk", "Oslo", "Paris", "Podgorica", "Prague", "Reykjavik", "Riga", "Rome", "San Marino", "Sarajevo", "Skopje", "Sofia", "Stockholm", "Tallinn", "Tirana", "Vaduz", "Valletta", "Vatican City", "Vienna", "Vilnius", "Warsaw", "Zagreb"}
 )
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+
+	files, err := ioutil.ReadDir("public/images")
+	if err != nil {
+		images = []string{"1.png", "2.png"}
+		return
+	}
+
+	for _, file := range files {
+		images = append(images, file.Name())
+	}
+}
 
 func RandImage() string {
 	return fmt.Sprintf("images/%s", images[rand.Intn(len(images))])
