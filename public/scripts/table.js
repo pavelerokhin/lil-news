@@ -186,6 +186,16 @@ class OutputTable extends Table {
                 continue;
             }
 
+            if (hc.isLink) {
+                let link = rowData[hc.backendKey];
+                if (!link) {
+                    cell.innerHTML = "<span class='no-link'>no link</span>"
+                    continue;
+                }
+                cell.innerHTML = `<a href='https://${link}' target='_blank'>link</a>`;
+                continue;
+            }
+
             // add configuration button
             // in this if we will add all the cells that will not riderect the page
             // if (hc.configurationButton) {
@@ -214,10 +224,18 @@ function sortObjectByFieldName(objectFromServer, backendKey, ascSorting) {
 }
 
 var tableConfig = {
-    headers: [{
+    headers: [
+        {
             backendKey: "categories",
             headerCapture: "Categories",
             sortingAsc: null
+        },
+        {
+            backendKey: "link",
+            headerCapture: "URL",
+            sortingAsc: null,
+            noSorting: true,
+            isLink: true
         },
         {
             backendKey: "headline",
