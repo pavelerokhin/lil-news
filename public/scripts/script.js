@@ -23,7 +23,7 @@ function webSocketConnect() {
     ping = setInterval(function() {
         ws.send('ping');
         pingBalance++;
-    }, 5000);
+    }, 2000);
 
     ws.onopen = function () {
         console.log("Connected");
@@ -52,7 +52,7 @@ function webSocketConnect() {
 }
 
 function pingPongServerWatch(ws) {
-    if (pingBalance > 2) { // more than a 10sec without a response from the server
+    if (pingBalance > 2) { // more than a 4sec without a response from the server
         const message = "no connection to server, reload the page";
         console.warn(message);
         clearInterval(ping);
