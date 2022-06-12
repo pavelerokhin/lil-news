@@ -95,6 +95,15 @@ tr:hover {
   margin-top: 5px;
 }
 
+.error-messages {
+  color: #f03232;
+  width: 100%;
+}
+
+.shadow {
+  background-color: rgba(100, 100, 100, 0.3);
+}
+
 #menu {
   position: relative;
   height: 50px;

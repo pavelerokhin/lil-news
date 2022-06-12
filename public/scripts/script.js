@@ -6,7 +6,8 @@ window.onload = () => {
     webSocketConnect()
 }
 
-var tableObject
+var ping, pingWatch
+var pingBalance = 0;
 
 function webSocketConnect() {
     let loc = window.location;
@@ -19,30 +20,54 @@ function webSocketConnect() {
 
     let ws = new WebSocket(uri);
 
+    ping = setInterval(function() {
+        ws.send('ping');
+        pingBalance++;
+    }, 2000);
+
     ws.onopen = function () {
         console.log("Connected");
     };
 
     ws.onmessage = function (evt) {
+
+        if (evt.data === "pong") {
+            pingBalance--;
+            return
+        }
+
         let t = new OutputTable("output", JSON.parse(evt.data));
         t.createTable();
-        // let out = document.getElementById("output");
-        // out.innerHTML = getTable(evt.data);
     };
+
+    ws.onclose = function() {
+        console.log("ws closed reload the page")
+    }
+
+    ws.onerror = function() {
+        console.log("error connecting to the backend")
+    }
+
+    pingWatch = setInterval(pingPongServerWatch, 2000, ws)
 }
 
-function getTable(data) {
-    let table = `<table><tr><th>categories</th><th>headline</th><th>image</th><th>location</th><th>date</th><th>severity</th></tr>`
-    for (let d of JSON.parse(data)) {
-        table += "<tr>"
-        table += `<td>${d.categories}</td>`
-        table += `<td>${d.headline}</td>`
-        table += `<td>${d.image}</td>`
-        table += `<td>${d.location}</td>`
-        table += `<td>${d.publishDate}</td>`
-        table += `<td>${d.severity}</td>`
-        table += "</tr>"
+function pingPongServerWatch(ws) {
+    if (pingBalance > 2) { // more than a 4sec without a response from the server
+        const message = "no connection to server, reload the page";
+        console.warn(message);
+        clearInterval(ping);
+        clearInterval(pingWatch);
+        ws.close();
+
+        addErrorMessage(message);
+        shadowTable();
     }
-    table += "</table>"
-    return table
+}
+
+function addErrorMessage(message) {
+    document.querySelector(".error-messages").innerText += `${message}\n`
+}
+
+function shadowTable() {
+    document.querySelector("table#output").classList.add("shadow");
 }

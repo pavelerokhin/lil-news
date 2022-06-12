@@ -6,7 +6,6 @@ class Table {
         }
         this.isOutputTable = true;
 
-        // TODO: make dataObject an separate class
         if (new.target === OutputTable) {
             if (Array.isArray(dataObject)) {
                 this.dataObject = dataObject;
@@ -55,7 +54,6 @@ class Table {
             let cell = row.insertCell(cellId++);
             cell.innerHTML = hc.headerCapture + (hc.sortingAsc !== undefined ? (hc.sortingAsc ? " ^" : " v") : "");
 
-            // TODO: make it a function
             // add sorting event
             if (!hc.noSotring) {
                 let that = this;
@@ -105,7 +103,6 @@ class Table {
     }
 
     searchFilter(search) {
-        debugger;
         if (search.value !== "") {
             for (let data of this.dataObject) {
                 let dataTextual = JSON.stringify(Object.values(data)).replace(/[\"\[\]]/g, "").replace("false", "").replace("true", "");
@@ -126,55 +123,14 @@ class Table {
     }
 
     refreshBody() {
-        debugger;
         this.table.getElementsByTagName("tbody")[0].remove();
         this.addBody();
-    }
-
-}
-
-class InputTable extends Table {
-    constructor(tableContainerId, dataObject) {
-        super(tableContainerId, dataObject);
-        this.tableConfig = tableConfig;
-    }
-
-    addRow(body, rowData) {
-        const headerConfig = this.tableConfig.headers;
-
-        let cellId = 0;
-        let row = body.insertRow();
-
-        if (!rowData) {
-            return;
-        }
-
-        if (rowData.errorHighlighted) {
-            row.classList.add("error_row");
-        }
-
-        let that = this;
-        for (let hc of headerConfig.filter(h => { return h.show || h.show === undefined })) {
-            let cell = row.insertCell(cellId++);
-            if (hc.deleteButton) {
-                let idToDelete = rowData._id;
-                cell.innerHTML = "&#10754;";
-                cell.classList.add("delete-button");
-                cell.addEventListener("click", function() {
-                    that.dataObject = that.dataObject.filter(d => { return d._id !== idToDelete });
-                    that.refreshBody();
-                });
-                continue;
-            }
-            cell.innerHTML = rowData[hc.backendKey];
-        }
     }
 }
 
 class OutputTable extends Table {
     constructor(tableContainerId, dataObjectFromServer) {
         super(tableContainerId, dataObjectFromServer);
-        // TODO: if it is an output table we take this config   
         this.tableConfig = tableConfig; // global configuration object
     }
 
