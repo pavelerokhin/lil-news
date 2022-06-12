@@ -10,6 +10,15 @@
     }
 }
 
+.error-messages {
+    color: rgb(240,50,50);
+    width: 100%;
+}
+
+.shadow {
+    background-color: rgba(100, 100, 100, 0.3);
+}
+
 #menu {
     position: relative;
     height: 50px;
@@ -24,4 +33,3 @@
         }
     }
 }
-

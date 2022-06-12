@@ -83,31 +83,44 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 		firstTime := true
 
 		for {
+			// Write
 			if firstTime || s.HasChanges() {
 				firstTime = false
 				h.logger.Println("there has been changes in the DB, write to socket")
 				allNews := s.GetAllNews()
 				msg, err := json.Marshal(allNews)
 				if err != nil {
-					c.Logger().Error(err)
+					h.logger.Printf("error writing to websocket: %s", err)
 				}
 				err = websocket.Message.Send(ws, string(msg))
 				if err != nil {
-					c.Logger().Error(err)
+					h.logger.Println("error sending message in websocket: %s", err)
 				}
 			}
-			time.Sleep(time.Millisecond * 500)
-		}
+			// Read
+			msg := ""
+			err := websocket.Message.Receive(ws, &msg)
+			if err != nil {
+				h.logger.Printf("error reading from websocket: %s", err)
+				return
+			}
+			if msg == "ping" {
+				err = websocket.Message.Send(ws, "pong")
+				if err != nil {
+					h.logger.Println("error sending message in websocket: %s", err)
+				}
+			}
 
-		// Read
-		//msg := ""
-		//err = websocket.Message.Receive(ws, &msg)
-		//if err != nil {
-		//	c.Logger().Error(err)
-		//}
-		//fmt.Printf("%s\n", msg)
-		//}
+		}
 
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil
+}
+
+func pong(ws *websocket.Conn) {
+	err := websocket.Message.Send(ws, "__pong__")
+	if err != nil {
+		h.logger.Println("error pong in websocket: %s", err)
+	}
+	time.Sleep(time.Minute)
 }
