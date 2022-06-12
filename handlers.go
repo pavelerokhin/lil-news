@@ -94,7 +94,7 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 				}
 				err = websocket.Message.Send(ws, string(msg))
 				if err != nil {
-					h.logger.Println("error sending message in websocket: %s", err)
+					h.logger.Printf("error sending message in websocket: %s", err)
 				}
 			}
 			// Read
@@ -107,12 +107,10 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 			if msg == "ping" {
 				err = websocket.Message.Send(ws, "pong")
 				if err != nil {
-					h.logger.Println("error sending message in websocket: %s", err)
+					h.logger.Printf("error sending message in websocket: %s", err)
 				}
 			}
-
 		}
-
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil
 }
@@ -120,7 +118,7 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 func pong(ws *websocket.Conn) {
 	err := websocket.Message.Send(ws, "__pong__")
 	if err != nil {
-		h.logger.Println("error pong in websocket: %s", err)
+		h.logger.Printf("error pong in websocket: %s", err)
 	}
 	time.Sleep(time.Minute)
 }
