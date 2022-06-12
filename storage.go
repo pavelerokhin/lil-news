@@ -57,7 +57,6 @@ func (r *SQLiteRepo) Delete(id int) error {
 	tx := r.DB.Where("id = ?", id).Find(&n)
 	if tx.RowsAffected != 0 {
 		tx = r.DB.Delete(&n)
-
 		if tx.Error != nil {
 			return fmt.Errorf("error while deleting news with ID %d: %s", id, tx.Error)
 		}

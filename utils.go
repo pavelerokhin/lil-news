@@ -36,7 +36,7 @@ func RandImage() string {
 }
 
 func RandLink() string {
-	if rand.Intn(2) == 0 {
+	if 0 == rand.Intn(2) {
 		return ""
 	}
 	return "www.google.com"
