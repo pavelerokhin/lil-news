@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gorm.io/gorm/clause"
 	"log"
 	"strings"
 
@@ -17,8 +18,11 @@ type SQLiteRepo struct {
 }
 
 type Storage interface {
+	AddCategory(category *Category) error
+	//AddCategoryNews(n *CategoryNews) error
 	AddNews(n *News) error
-	Delete(id int) error
+	DeleteNews(id int) error
+	GetAllCategories() []Category
 	GetAllNews() []News
 	GetNewsByID(id int) *News
 	HasChanges() bool
@@ -44,14 +48,63 @@ func NewNewsSQLiteRepo(dbFileName string, logger *log.Logger) Storage {
 
 	err = sql.AutoMigrate(&News{})
 	if err != nil {
-		logger.Printf("error: cannot automigrate model to the database")
+		logger.Printf("error: cannot auto migrate model to the database")
 		return &SQLiteRepo{}
 	}
+
+	err = sql.AutoMigrate(&Category{})
+	if err != nil {
+		logger.Printf("error: cannot auto migrate model to the database")
+		return &SQLiteRepo{}
+	}
+
+	err = sql.AutoMigrate(&CategoryNews{})
+	if err != nil {
+		logger.Printf("error: cannot auto migrate model to the database")
+		return &SQLiteRepo{}
+	}
+
 	logger.Printf("connected to SQLite database %s", dbFileName)
 	return &SQLiteRepo{DB: sql, logger: logger}
 }
 
-func (r *SQLiteRepo) Delete(id int) error {
+// AddCategory add news to DB
+func (r *SQLiteRepo) AddCategory(category *Category) error {
+	r.logger.Printf("adding category %s", category)
+	tx := r.DB.Create(category)
+	if tx.Error != nil {
+		r.logger.Printf("error category %e", tx.Error)
+		return tx.Error
+	}
+	r.newChangesInRepo = true
+	return nil
+}
+
+//// AddCategoryNews add news to DB
+//func (r *SQLiteRepo) AddCategoryNews(categoryNews *CategoryNews) error {
+//	r.logger.Printf("associating categories %s to the news", categoryNews)
+//	tx := r.DB.Create(categoryNews)
+//	if tx.Error != nil {
+//		r.logger.Printf("error category association %e", tx.Error)
+//		return tx.Error
+//	}
+//	r.newChangesInRepo = true
+//	return nil
+//}
+
+// AddNews add news to DB
+func (r *SQLiteRepo) AddNews(n *News) error {
+	r.logger.Printf("adding news %s", n)
+	tx := r.DB.Create(n)
+	if tx.Error != nil {
+		r.logger.Printf("error news %e", tx.Error)
+		return tx.Error
+	}
+	r.newChangesInRepo = true
+	return nil
+}
+
+func (r *SQLiteRepo) DeleteNews(id int) error {
 	var n News
 
 	tx := r.DB.Where("id = ?", id).Find(&n)
@@ -69,15 +122,16 @@ func (r *SQLiteRepo) Delete(id int) error {
 	return nil
 }
 
-// AddNews add news to DB
-func (r *SQLiteRepo) AddNews(n *News) error {
-	r.logger.Printf("adding news %s", n)
-	tx := r.DB.Create(n)
-	if tx.Error != nil {
-		r.logger.Printf("error saving medium %e", tx.Error)
-		return tx.Error
+// GetAllCategories gets all categories from DB
+func (r *SQLiteRepo) GetAllCategories() []Category {
+	r.logger.Printf("getting all categories")
+	var categories []Category
+	tx := r.DB.Find(&categories)
+	if tx.RowsAffected != 0 {
+		r.logger.Printf("%d categories found", tx.RowsAffected)
+		return categories
 	}
-	r.newChangesInRepo = true
+	r.logger.Printf("no categories found")
 	return nil
 }
 
@@ -85,7 +139,7 @@ func (r *SQLiteRepo) AddNews(n *News) error {
 func (r *SQLiteRepo) GetAllNews() []News {
 	r.logger.Printf("getting all news")
 	var news []News
-	tx := r.DB.Find(&news)
+	tx := r.DB.Preload(clause.Associations).Find(&news)
 	if tx.RowsAffected != 0 {
 		r.logger.Printf("%d articles found", tx.RowsAffected)
 		return news

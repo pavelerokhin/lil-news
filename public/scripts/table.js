@@ -164,6 +164,19 @@ class OutputTable extends Table {
             // add cell from the backend
             cell = row.insertCell(cellId++);
 
+            if (hc.isCategory) {
+                let categories = rowData[hc.backendKey];
+                if (!categories) {
+                    continue;
+                }
+
+                for (let cat of categories) {
+                    cell.innerHTML += `<span class="category" style="background-color: ${categoriesDictionary[cat.categoryId].color}">${categoriesDictionary[cat.categoryId].name}</span>`;
+                }
+
+                continue;
+            }
+
             if (hc.isImage) {
                 let imgUrl = rowData[hc.backendKey];
                 if (!imgUrl) {
@@ -177,8 +190,8 @@ class OutputTable extends Table {
             if (hc.isDate) {
                 try {
                     let d = new Date(rowData[hc.backendKey]);
-                    cell.innerHTML = `<span class="date">${d.getDate()}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}</span>` +
-                        `<span class="time">${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}</span>`;
+                    cell.innerHTML = `<span class="date">${d.getDate()}.${padNumber(d.getMonth() + 1)}.${d.getFullYear()}</span>` +
+                        `<span class="time">${padNumber(d.getHours())}:${padNumber(d.getMinutes())}:${padNumber(d.getSeconds())}</span>`;
                 } catch (e) {
                     console.warn("cannot parse date", e);
                     cell.innerHTML = rowData[hc.backendKey];
@@ -228,7 +241,8 @@ var tableConfig = {
         {
             backendKey: "categories",
             headerCapture: "Categories",
-            sortingAsc: null
+            sortingAsc: null,
+            isCategory: true
         },
         {
             backendKey: "link",
@@ -266,4 +280,8 @@ var tableConfig = {
             sortingAsc: null,
         },
     ],
+}
+
+function padNumber(number) {
+    return String(number).padStart(2, '0')
 }

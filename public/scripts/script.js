@@ -1,13 +1,13 @@
 "use strict"
 
-console.log("script loaded")
-
-window.onload = () => {
-    webSocketConnect()
-}
-
+var categoriesDictionary = {} // global variable for design of categories (data from DB)
 var ping, pingWatch
 var pingBalance = 0;
+
+window.onload = () => {
+    getCategoriesDictionary()
+    webSocketConnect()
+}
 
 function webSocketConnect() {
     let loc = window.location;
@@ -70,4 +70,17 @@ function addErrorMessage(message) {
 
 function shadowTable() {
     document.querySelector("table#output").classList.add("shadow");
+}
+
+async function getCategoriesDictionary() {
+    const response = await fetch('/categories');
+    const data = await response.text();
+    makeDictionary(JSON.parse(data))
+}
+
+
+function makeDictionary(json) {
+    for(let j of json) {
+        categoriesDictionary[j.ID] = {name: j.name, color: j.color}
+    }
 }

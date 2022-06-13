@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 type handlers struct {
@@ -28,7 +27,7 @@ func (h *handlers) Delete(c echo.Context) error {
 		return c.String(http.StatusConflict, "KO")
 	}
 
-	err = h.storage.Delete(id)
+	err = h.storage.DeleteNews(id)
 	if err != nil {
 		return c.String(http.StatusConflict, "KO")
 	}
@@ -37,6 +36,15 @@ func (h *handlers) Delete(c echo.Context) error {
 
 func (h *handlers) DownloadCSV(c echo.Context) error {
 	return c.Render(http.StatusOK, "newsfeed", "")
+}
+
+func (h *handlers) Categories(c echo.Context) error {
+	categories := h.storage.GetAllCategories()
+	msg, err := json.Marshal(categories)
+	if err != nil {
+		return c.String(http.StatusConflict, "KO")
+	}
+	return c.String(http.StatusOK, string(msg))
 }
 
 func (h *handlers) IndexPage(c echo.Context) error {
@@ -50,12 +58,12 @@ func (h *handlers) Insert(c echo.Context) error {
 	}
 
 	err = h.storage.AddNews(&News{
-		Categories:  nil,
-		Headline:    c.FormValue("headline"),
-		Image:       c.FormValue("image"),
-		Location:    c.FormValue("location"),
-		PublishDate: c.FormValue("date"),
-		Severity:    s,
+		CategoryNews: nil,
+		Headline:     c.FormValue("headline"),
+		Image:        c.FormValue("image"),
+		Location:     c.FormValue("location"),
+		PublishDate:  c.FormValue("date"),
+		Severity:     s,
 	})
 	if err != nil {
 		return c.String(http.StatusConflict, "KO")
@@ -113,12 +121,4 @@ func (h *handlers) NewsFeedWebSocketHandler(c echo.Context) error {
 		}
 	}).ServeHTTP(c.Response(), c.Request())
 	return nil
-}
-
-func pong(ws *websocket.Conn) {
-	err := websocket.Message.Send(ws, "__pong__")
-	if err != nil {
-		h.logger.Printf("error pong in websocket: %s", err)
-	}
-	time.Sleep(time.Minute)
 }
