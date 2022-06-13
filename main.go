@@ -37,6 +37,7 @@ func main() {
 
 	// Handlers
 	e.GET("/", h.IndexPage)
+	e.GET("/categories", h.Categories)
 	e.GET("/csv", h.DownloadCSV)
 	e.GET("/ws", h.NewsFeedWebSocketHandler)
 	e.POST("/delete", h.Delete) // curl -X POST http://localhost:1111/delete -d "id=1"
