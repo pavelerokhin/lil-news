@@ -183,7 +183,7 @@ class OutputTable extends Table {
                     cell.innerHTML = "no image"
                     continue;
                 }
-                cell.innerHTML = `<img src='${imgUrl}' alt='' style='width:40px; height:40px;'>`;
+                cell.innerHTML = `<img src='${imgUrl}' alt='' class="rounded" style='width:40px; height:40px;'>`;
                 continue;
             }
 
