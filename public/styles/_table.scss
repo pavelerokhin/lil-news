@@ -5,33 +5,35 @@ table {
 	box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-th,
-td {
+thead td {
+	background-color: $black;
+	color: $white;
 	padding: 15px;
-	background-color: rgba(255,255,255,0.1);
-	color: #000;
+    text-align: left;
+
+}
+
+td {
+	color: $black;
+	padding: 15px;
 
     a, a:visited {
-        color: blue
+        color: $red;
     }
 
 	.time {
-	    color: grey;
+	    color: $dark-grey;
 	    margin-left: 30px;
 	}
 
 	.no-link {
-	    color: grey;
+	    color: $dark-grey;
 	}
 }
 
-thead td {
-    background-color: #e8735e;
-    text-align: left;
-}
 
 tr {
     &:hover {
-        background-color: rgba(150,150,150,0.1);
+        background-color: $light-grey;
     }
 }
