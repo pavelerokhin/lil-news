@@ -1,6 +1,8 @@
 @import "utils";
 @import "media-utils";
 @import "table";
+@import "logo";
+
 
 .category {
     border: 1px solid grey;
@@ -29,14 +31,11 @@
     justify-content: flex-start;
 
     h1 {
-        font-size: 25px;
+        font-size: 23px;
         margin-left: 18px;
     }
 
-    .logo {
-        height: 70px;
-        width: 70px;
-    }
+    //see logo in a separate SCSS file
 
     .topic-name {
         text-decoration: underline;
