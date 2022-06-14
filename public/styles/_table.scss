@@ -39,7 +39,7 @@ td {
     }
 
     img {
-        transform: translateX(50%);
+        transform: translateX(calc(50% + 5px));
     }
 
 	.time {
