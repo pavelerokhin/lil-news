@@ -22,6 +22,9 @@ thead {
     }
 }
 
+$alert5: #ff4040;
+$alert4: #fce716;
+
 td {
     border: 1px solid $light-grey;
 	color: $black;
@@ -42,6 +45,14 @@ td {
 	.time {
 	    color: $dark-grey;
 	    margin-left: 30px;
+	}
+
+	&.alert4 {
+        border-right: 7px solid $alert4;
+    }
+
+	&.alert5 {
+	    border-right: 7px solid $alert5;
 	}
 }
 

@@ -209,6 +209,18 @@ class OutputTable extends Table {
                 continue;
             }
 
+            if (hc.backendKey === "severity") {
+                let s = rowData[hc.backendKey];
+                switch (s) {
+                    case 4:
+                        cell.classList.add("alert4");
+                        break;
+                    case 5:
+                        cell.classList.add("alert5");
+                        break;
+                }
+            }
+
             // add configuration button
             // in this if we will add all the cells that will not riderect the page
             // if (hc.configurationButton) {
