@@ -97,6 +97,12 @@ td .time {
   color: #191919;
   margin-left: 30px;
 }
+td.alert4 {
+  border-right: 7px solid #fce716;
+}
+td.alert5 {
+  border-right: 7px solid #ff4040;
+}
 
 tr:hover {
   background-color: #f2e9df;
