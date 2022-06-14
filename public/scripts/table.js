@@ -52,7 +52,7 @@ class Table {
         //inserting cells from tableConfig
         headerConfig && headerConfig.filter(h => { return h.show || h.show === undefined }).forEach(hc => {
             let cell = row.insertCell(cellId++);
-            cell.innerHTML = hc.headerCapture + (hc.sortingAsc !== undefined ? (hc.sortingAsc ? " ^" : " v") : "");
+            cell.innerHTML = hc.headerCapture + (hc.sortingAsc !== undefined ? (hc.sortingAsc ? "<span class='arrow'>↑</span>" : "<span class='arrow'>↓</span>") : "");
 
             // add sorting event
             if (!hc.noSotring) {
@@ -202,7 +202,7 @@ class OutputTable extends Table {
             if (hc.isLink) {
                 let link = rowData[hc.backendKey];
                 if (!link) {
-                    cell.innerHTML = "<span class='no-link'>no link</span>"
+                    cell.innerHTML = ""
                     continue;
                 }
                 cell.innerHTML = `<a href='https://${link}' target='_blank'>link</a>`;

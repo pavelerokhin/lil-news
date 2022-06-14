@@ -32,15 +32,15 @@
         font-size: 25px;
         margin-left: 18px;
     }
-}
 
-.highlight {
-    color: $red;
-}
+    .logo {
+        height: 70px;
+        width: 70px;
+    }
 
-.logo {
-    height: 70px;
-    width: 70px;
+    .topic-name {
+        text-decoration: underline;
+    }
 }
 
 .rounded {
@@ -48,9 +48,10 @@
 }
 
 .shadow {
-    background-color: rgba(100, 100, 100, 0.3);
+    background-color: rgba(100, 100, 100, 0.2);
 }
 
+$menu-elements-height: 27px;
 #menu {
     align-items: end;
     display: flex;
@@ -62,12 +63,28 @@
     #csv-button {
         border: 1px solid $light-grey;
         border-radius: 5px;
-        padding: 7px;
+        font-weight: 400;
+        line-height: $menu-elements-height;
+        padding: 0 7px;
         position: absolute;
         right: 2px;
+        height: $menu-elements-height;
 
         &:hover {
             color: #e8735e;
         }
+    }
+
+    #table-search {
+        background-color: $light-grey;
+        border: 1px solid $red;
+        border-radius: 5px;
+//         display: block;
+        color: $black;
+        height: 27px;
+        margin-left: 2px;
+        font-size: 15px;
+        text-indent: 5px;
+        width: 500px;
     }
 }
