@@ -1,0 +1,223 @@
+// colors
+$alert5: #ff4040;
+$alert4: #fce716;
+
+$alert5-dark: #ff77ff;
+$alert4-dark: #ffc594;
+
+$black: #000;
+$black-transparent: rgba(0,0,0,0.1);
+$dark-grey: rgba(25,25,25,1);
+$light-grey: #f2e9df;
+$red: #d52b1e;
+$white: white;
+$white-transparent: rgba(255,255,255,0.1);
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+}
+
+html {
+    background: $white;
+    color: $black;
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: $dark-grey;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: $white;
+      border: 1px solid $black;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: $dark-grey;
+    }
+
+    table {
+        box-shadow: 0 0 5px $black-transparent;
+        tbody {
+            td {
+                border: 1px solid $light-grey;
+                color: $black;
+
+                a, a:visited {
+                    color: $red;
+                }
+
+                .time {
+                    color: $dark-grey;
+                }
+
+                &.alert4 {
+                    border-right: 7px solid $alert4;
+                }
+
+                &.alert5 {
+                    border-right: 7px solid $alert5;
+                }
+            }
+
+            tr {
+                &:hover {
+                    background-color: $light-grey;
+                }
+            }
+        }
+    }
+
+    .category {
+        border: 1px solid $dark-grey;
+        color: white;
+    }
+
+    .error-messages {
+        color: $alert5;
+    }
+
+    .highlight {
+        color: $red;
+    }
+
+    .shadow {
+        background-color: rgba(100, 100, 100, 0.2);
+    }
+
+    #header {
+        svg.logo {
+            fill: $black;
+             #st1 {
+                fill: $red;
+            }
+        }
+    }
+
+    #menu {
+         #table-search {
+             background-color: $light-grey;
+             color: $black;
+        }
+    }
+}
+
+html[data-theme='dark'] {
+    background: $dark-grey;
+    color: $white;
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: $white;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: $dark-grey;
+      border: 1px solid $light-grey;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: $white;
+    }
+
+    table {
+        box-shadow: 0 0 5px $white-transparent;
+        tbody {
+            td {
+                border: 1px solid $light-grey;
+                color: $white;
+
+                a, a:visited {
+                    color: $red;
+                }
+
+                .time {
+                    color: $light-grey;
+                }
+
+                &.alert4 {
+                    border-right: 7px solid $alert4-dark;
+                }
+
+                &.alert5 {
+                    border-right: 7px solid $alert5-dark;
+                }
+            }
+
+            tr {
+                &:hover {
+                    background-color: $dark-grey;
+                }
+            }
+        }
+
+        thead {
+            td {
+                border: 1px solid $white;
+            }
+        }
+    }
+
+    .category {
+        border: 1px solid $light-grey;
+        color: white;
+    }
+
+    .error-messages {
+        color: $alert5-dark;
+    }
+
+    .highlight {
+        color: $alert5;
+    }
+
+    .shadow {
+        background-color: rgba(240, 240, 240, 0.1);
+    }
+
+    #header {
+        svg.logo {
+            fill: $white;
+             #st1 {
+                fill: $alert5-dark;
+            }
+        }
+    }
+
+    #menu {
+         #table-search {
+             background-color: $dark-grey;
+             color: $white;
+        }
+    }
+}
+
+
+// no changes
+
+table {
+    thead {
+        td {
+            background-color: $black;
+            color: $white;
+        }
+    }
+}
+
+#menu {
+    #csv-button {
+        border: 1px solid $light-grey;
+        &:hover {
+            color: $red;
+        }
+    }
+}
