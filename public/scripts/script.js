@@ -5,8 +5,9 @@ var ping, pingWatch
 var pingBalance = 0;
 
 window.onload = () => {
-    getCategoriesDictionary()
-    webSocketConnect()
+    getCategoriesDictionary();
+    webSocketConnect();
+    themeToggle();
 }
 
 function webSocketConnect() {
@@ -82,5 +83,30 @@ async function getCategoriesDictionary() {
 function makeDictionary(json) {
     for(let j of json) {
         categoriesDictionary[j.ID] = {name: j.name, color: j.color}
+    }
+}
+
+
+function themeToggle() {
+    debugger;
+    let checkbox = document.querySelector('input#theme-toggle');
+
+    checkbox.addEventListener('change', function() {
+        debugger;
+
+        if(this.checked) {
+            trans()
+            document.documentElement.setAttribute('data-theme', 'dark')
+        } else {
+            trans()
+            document.documentElement.setAttribute('data-theme', 'light')
+        }
+    })
+
+    let trans = () => {
+        document.documentElement.classList.add('transition');
+        window.setTimeout(() => {
+            document.documentElement.classList.remove('transition');
+        }, 1000)
     }
 }
