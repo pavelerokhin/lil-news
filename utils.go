@@ -11,11 +11,11 @@ import (
 )
 
 var (
-	caser       = cases.Title(language.English)
-	categories  = []Category{{Name: "cat1", Color: "DD6B7F"}, {Name: "cat2", Color: "224624"}, {Name: "cat3", Color: "800080"}}
-	images      []string
-	letterRunes = []rune("abcdefghijklmnopqrstuvwxyz    ")
-	locations   = []string{"Madrid", "Minsk", "Monaco", "Moscow", "Nicosia", "Nuuk", "Oslo", "Paris", "Podgorica", "Prague", "Reykjavik", "Riga", "Rome", "San Marino", "Sarajevo", "Skopje", "Sofia", "Stockholm", "Tallinn", "Tirana", "Vaduz", "Valletta", "Vatican City", "Vienna", "Vilnius", "Warsaw", "Zagreb"}
+	caser          = cases.Title(language.English)
+	tempCategories = []Category{{Name: "cat1", Color: "DD6B7F"}, {Name: "cat2", Color: "224624"}, {Name: "cat3", Color: "800080"}}
+	images         []string
+	letterRunes    = []rune("abcdefghijklmnopqrstuvwxyz    ")
+	locations      = []string{"Madrid", "Minsk", "Monaco", "Moscow", "Nicosia", "Nuuk", "Oslo", "Paris", "Podgorica", "Prague", "Reykjavik", "Riga", "Rome", "San Marino", "Sarajevo", "Skopje", "Sofia", "Stockholm", "Tallinn", "Tirana", "Vaduz", "Valletta", "Vatican City", "Vienna", "Vilnius", "Warsaw", "Zagreb"}
 )
 
 func init() {
@@ -31,7 +31,7 @@ func init() {
 		images = append(images, file.Name())
 	}
 
-	for _, category := range categories {
+	for _, category := range tempCategories {
 		_ = s.AddCategory(&category)
 	}
 }
@@ -42,7 +42,7 @@ func RandCategory() []CategoryNews {
 
 	cats = s.GetAllCategories()
 
-	n := rand.Intn(len(categories)) + 1
+	n := rand.Intn(len(tempCategories)) + 1
 
 	for n > 0 {
 		var i int

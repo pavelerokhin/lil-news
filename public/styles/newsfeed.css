@@ -9,7 +9,7 @@
 }
 
 html {
-  background: white;
+  background: #fff;
   color: #000;
   /* Track */
   /* Handle */
@@ -19,7 +19,7 @@ html ::-webkit-scrollbar-track {
   background: #191919;
 }
 html ::-webkit-scrollbar-thumb {
-  background: white;
+  background: #fff;
   border: 1px solid #000;
 }
 html ::-webkit-scrollbar-thumb:hover {
@@ -63,6 +63,9 @@ html #header svg.logo {
 html #header svg.logo #st1 {
   fill: #d52b1e;
 }
+html #menu #csv-button:hover {
+  color: #d52b1e;
+}
 html #menu #table-search {
   background-color: #f2e9df;
   color: #000;
@@ -70,27 +73,27 @@ html #menu #table-search {
 
 html[data-theme=dark] {
   background: #191919;
-  color: white;
+  color: #fff;
   /* Track */
   /* Handle */
   /* Handle on hover */
 }
 html[data-theme=dark] ::-webkit-scrollbar-track {
-  background: white;
+  background: #fff;
 }
 html[data-theme=dark] ::-webkit-scrollbar-thumb {
   background: #191919;
   border: 1px solid #f2e9df;
 }
 html[data-theme=dark] ::-webkit-scrollbar-thumb:hover {
-  background: white;
+  background: #fff;
 }
 html[data-theme=dark] table {
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
 }
 html[data-theme=dark] table tbody td {
   border: 1px solid #f2e9df;
-  color: white;
+  color: #fff;
 }
 html[data-theme=dark] table tbody td img {
   border: 1px solid #f2e9df;
@@ -111,7 +114,7 @@ html[data-theme=dark] table tbody tr:hover *:not(span) {
   color: #000 !important;
 }
 html[data-theme=dark] table thead td {
-  border: 1px solid white;
+  border: 1px solid #fff;
 }
 html[data-theme=dark] .category {
   border: 1px solid #f2e9df;
@@ -124,29 +127,29 @@ html[data-theme=dark] .highlight {
   color: #ff4040;
 }
 html[data-theme=dark] .shadow {
-  background-color: rgba(240, 240, 240, 0.1);
+  background-color: rgba(255, 197, 148, 0.4);
 }
 html[data-theme=dark] #header svg.logo {
-  fill: white;
+  fill: #fff;
 }
 html[data-theme=dark] #header svg.logo #st1 {
   fill: #ff77ff;
 }
+html[data-theme=dark] #menu #csv-button:hover {
+  color: #ff77ff;
+}
 html[data-theme=dark] #menu #table-search {
   background-color: #191919;
-  color: white;
+  color: #fff;
 }
 
 table thead td {
   background-color: #000;
-  color: white;
+  color: #fff;
 }
 
 #menu #csv-button {
   border: 1px solid #f2e9df;
-}
-#menu #csv-button:hover {
-  color: #d52b1e;
 }
 
 * {
@@ -243,7 +246,7 @@ ul {
 }
 
 .toggle-track {
-  background: white;
+  background: #fff;
   border: 1px solid #f2e9df;
   border-radius: 100px;
   cursor: pointer;
