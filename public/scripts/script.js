@@ -80,7 +80,7 @@ function getCategoriesDictionary() {
     if (request.status === 200) {
         return makeDictionary(JSON.parse(request.responseText))
     }
-    console.error("categories cannot be received from the server");
+    console.error("error: no categories info received from the server");
     return null
 }
 
