@@ -1,16 +1,15 @@
 "use strict"
 
-var categoriesDictionary = {} // global variable for design of categories (data from DB)
 var ping, pingWatch
 var pingBalance = 0;
 
 window.onload = () => {
-    getCategoriesDictionary();
-    webSocketConnect();
+    let categoriesDictionary = getCategoriesDictionary();
+    webSocketConnect(categoriesDictionary);
     themeToggle();
 }
 
-function webSocketConnect() {
+function webSocketConnect(categoriesDictionary) {
     let loc = window.location;
     let uri = "ws:";
 
@@ -37,7 +36,7 @@ function webSocketConnect() {
             return
         }
 
-        let t = new OutputTable("output", JSON.parse(evt.data));
+        let t = new OutputTable("output", JSON.parse(evt.data), categoriesDictionary);
         t.createTable();
     };
 
@@ -73,17 +72,25 @@ function shadowTable() {
     document.querySelector("table#output").classList.add("shadow");
 }
 
-async function getCategoriesDictionary() {
-    const response = await fetch('/categories');
-    const data = await response.text();
-    makeDictionary(JSON.parse(data))
+function getCategoriesDictionary() {
+    let request = new XMLHttpRequest();
+    request.open('GET', '/categories', false);  // `false` makes the request synchronous
+    request.send(null);
+
+    if (request.status === 200) {
+        return makeDictionary(JSON.parse(request.responseText))
+    }
+    console.error("error: no categories info received from the server");
+    return null
 }
 
 
 function makeDictionary(json) {
+    let categoriesDictionary = {}
     for(let j of json) {
         categoriesDictionary[j.ID] = {name: j.name, color: j.color}
     }
+    return categoriesDictionary
 }
 
 
