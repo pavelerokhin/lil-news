@@ -10,7 +10,9 @@ $black-transparent: rgba(0,0,0,0.1);
 $dark-grey: rgba(25,25,25,1);
 $light-grey: #f2e9df;
 $red: #d52b1e;
-$white: white;
+$shadow: rgba(100, 100, 100, 0.2);
+$shadow-dark: rgba(255, 197, 148, 0.3);
+$white: #fff;
 $white-transparent: rgba(255,255,255,0.1);
 
 /* width */
@@ -93,7 +95,7 @@ html {
     }
 
     .shadow {
-        background-color: rgba(100, 100, 100, 0.2);
+        background-color: $shadow;
     }
 
     #header {
@@ -106,6 +108,10 @@ html {
     }
 
     #menu {
+        #csv-button:hover {
+                color: $red;
+        }
+
          #table-search {
              background-color: $light-grey;
              color: $black;
@@ -196,7 +202,7 @@ html[data-theme='dark'] {
     }
 
     .shadow {
-        background-color: rgba(240, 240, 240, 0.1);
+        background-color: $shadow-dark;
     }
 
     #header {
@@ -209,9 +215,13 @@ html[data-theme='dark'] {
     }
 
     #menu {
-         #table-search {
-             background-color: $dark-grey;
-             color: $white;
+        #csv-button:hover {
+            color: $alert5-dark;
+        }
+
+        #table-search {
+            background-color: $dark-grey;
+            color: $white;
         }
     }
 }
@@ -231,8 +241,5 @@ table {
 #menu {
     #csv-button {
         border: 1px solid $light-grey;
-        &:hover {
-            color: $red;
-        }
     }
 }

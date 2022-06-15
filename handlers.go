@@ -21,6 +21,15 @@ func getHandlers(l *log.Logger, s Storage) *handlers {
 	}
 }
 
+func (h *handlers) Categories(c echo.Context) error {
+	categories := h.storage.GetAllCategories()
+	msg, err := json.Marshal(categories)
+	if err != nil {
+		return c.String(http.StatusConflict, "KO")
+	}
+	return c.String(http.StatusOK, string(msg))
+}
+
 func (h *handlers) Delete(c echo.Context) error {
 	id, err := strconv.Atoi(c.FormValue("id"))
 	if err != nil {
@@ -35,16 +44,15 @@ func (h *handlers) Delete(c echo.Context) error {
 }
 
 func (h *handlers) DownloadCSV(c echo.Context) error {
-	return c.Render(http.StatusOK, "newsfeed", "")
-}
-
-func (h *handlers) Categories(c echo.Context) error {
-	categories := h.storage.GetAllCategories()
-	msg, err := json.Marshal(categories)
+	news := h.storage.GetAllNews()
+	// create CSV file
+	filepath, fileName, err := CreateCSV(news)
 	if err != nil {
-		return c.String(http.StatusConflict, "KO")
+		h.logger.Printf("error creating CSV file: %s", err)
+		return c.String(http.StatusInternalServerError, "KO")
 	}
-	return c.String(http.StatusOK, string(msg))
+	// return CSV file
+	return c.Attachment(filepath, fileName)
 }
 
 func (h *handlers) IndexPage(c echo.Context) error {
