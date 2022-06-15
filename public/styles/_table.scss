@@ -1,7 +1,8 @@
 table {
-	width: 80%;
+	width: 70%;
 	border-collapse: collapse;
 	overflow: hidden;
+	padding: 10px;
 
 	tbody {
         td {
@@ -10,12 +11,13 @@ table {
 
             a, a:visited {
                 display: block;
-                text-align: center;
+                text-align: left;
                 width: 100%;
             }
 
             img {
-                transform: translateX(calc(50% + 5px));
+                align-self: center;
+                justify-content: center;
             }
 
             .time {
@@ -37,6 +39,18 @@ table {
         .arrow {
             margin-left: 8px;
             position: relative;
+        }
+    }
+
+    td {
+        min-width: 70px;
+        &.image-centered {
+            img{
+                transform: translateX(calc(50% + 5px));
+            }
+        }
+        &.text-centered {
+            text-align: center;
         }
     }
 }

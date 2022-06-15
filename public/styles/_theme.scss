@@ -50,9 +50,13 @@ html {
                 border: 1px solid $light-grey;
                 color: $black;
 
-                a, a:visited {
-                    color: $red;
-                }
+//                 a, a:visited {
+//                     color: $red;
+//                 }
+
+//                 a:visited {
+//                     color: $red;
+//                 }
 
                 .time {
                     color: $dark-grey;
@@ -85,7 +89,7 @@ html {
     }
 
     .highlight {
-        color: $red;
+        color: $alert4;
     }
 
     .shadow {
@@ -136,8 +140,16 @@ html[data-theme='dark'] {
                 border: 1px solid $light-grey;
                 color: $white;
 
-                a, a:visited {
-                    color: $red;
+//                 a, a:visited {
+//                     color: $red;
+//                 }
+
+//                 a:visited {
+//                     color: $alert5;
+//                 }
+
+                img {
+                    border: 1px solid $light-grey;
                 }
 
                 .time {
@@ -155,7 +167,10 @@ html[data-theme='dark'] {
 
             tr {
                 &:hover {
-                    background-color: $dark-grey;
+                    background-color: $light-grey;
+                    *:not(span) {
+                        color: $black !important;
+                    }
                 }
             }
         }

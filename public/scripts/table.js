@@ -184,6 +184,8 @@ class OutputTable extends Table {
                     continue;
                 }
                 cell.innerHTML = `<img src='${imgUrl}' alt='' class="rounded" style='width:40px; height:40px;'>`;
+                cell.classList.add("image-centered");
+
                 continue;
             }
 
@@ -196,16 +198,8 @@ class OutputTable extends Table {
                     console.warn("cannot parse date", e);
                     cell.innerHTML = rowData[hc.backendKey];
                 }
-                continue;
-            }
+                cell.classList.add("text-centered");
 
-            if (hc.isLink) {
-                let link = rowData[hc.backendKey];
-                if (!link) {
-                    cell.innerHTML = ""
-                    continue;
-                }
-                cell.innerHTML = `<a href='https://${link}' target='_blank'>link</a>`;
                 continue;
             }
 
@@ -230,7 +224,20 @@ class OutputTable extends Table {
             //     continue;
             // }
 
+            if (hc.isHeadline) {
+                let link = rowData["link"];
+                let text = rowData[hc.backendKey]
+                if (link) {
+                    cell.innerHTML = `<a href='https://${link}' target='_blank'>${text}</a>`;
+                } else {
+                    cell.innerHTML = text;
+                }
+
+                continue;
+            }
+
             cell.innerHTML = rowData[hc.backendKey];
+            cell.classList.add("text-centered");
 
             // if (rowData.ID !== undefined && !this.tableConfig.noRiderect) {
             //     cell.addEventListener("click", dispatchCallbackFunction, true);
@@ -261,12 +268,14 @@ var tableConfig = {
             headerCapture: "URL",
             sortingAsc: null,
             noSorting: true,
-            isLink: true
+            isLink: true,
+            show: false
         },
         {
             backendKey: "headline",
             headerCapture: "Headline",
-            sortingAsc: null
+            sortingAsc: null,
+            isHeadline: true
         },
         {
             backendKey: "image",

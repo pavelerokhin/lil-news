@@ -32,9 +32,6 @@ html table tbody td {
   border: 1px solid #f2e9df;
   color: #000;
 }
-html table tbody td a, html table tbody td a:visited {
-  color: #d52b1e;
-}
 html table tbody td .time {
   color: #191919;
 }
@@ -55,7 +52,7 @@ html .error-messages {
   color: #ff4040;
 }
 html .highlight {
-  color: #d52b1e;
+  color: #fce716;
 }
 html .shadow {
   background-color: rgba(100, 100, 100, 0.2);
@@ -95,8 +92,8 @@ html[data-theme=dark] table tbody td {
   border: 1px solid #f2e9df;
   color: white;
 }
-html[data-theme=dark] table tbody td a, html[data-theme=dark] table tbody td a:visited {
-  color: #d52b1e;
+html[data-theme=dark] table tbody td img {
+  border: 1px solid #f2e9df;
 }
 html[data-theme=dark] table tbody td .time {
   color: #f2e9df;
@@ -108,7 +105,10 @@ html[data-theme=dark] table tbody td.alert5 {
   border-right: 7px solid #ff77ff;
 }
 html[data-theme=dark] table tbody tr:hover {
-  background-color: #191919;
+  background-color: #f2e9df;
+}
+html[data-theme=dark] table tbody tr:hover *:not(span) {
+  color: #000 !important;
 }
 html[data-theme=dark] table thead td {
   border: 1px solid white;
@@ -292,9 +292,10 @@ ul {
   }
 }
 table {
-  width: 80%;
+  width: 70%;
   border-collapse: collapse;
   overflow: hidden;
+  padding: 10px;
 }
 table tbody td {
   padding: 8px;
@@ -302,11 +303,12 @@ table tbody td {
 }
 table tbody td a, table tbody td a:visited {
   display: block;
-  text-align: center;
+  text-align: left;
   width: 100%;
 }
 table tbody td img {
-  transform: translateX(calc(50% + 5px));
+  align-self: center;
+  justify-content: center;
 }
 table tbody td .time {
   margin-left: 30px;
@@ -323,6 +325,15 @@ table thead td {
 table thead .arrow {
   margin-left: 8px;
   position: relative;
+}
+table td {
+  min-width: 70px;
+}
+table td.image-centered img {
+  transform: translateX(calc(50% + 5px));
+}
+table td.text-centered {
+  text-align: center;
 }
 
 * {
@@ -381,7 +392,7 @@ ul {
   margin-bottom: 10px;
   position: relative;
   height: 50px;
-  width: 80%;
+  width: 70%;
 }
 #menu #csv-button {
   border-radius: 5px;
