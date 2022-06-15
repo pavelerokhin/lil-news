@@ -129,9 +129,11 @@ class Table {
 }
 
 class OutputTable extends Table {
-    constructor(tableContainerId, dataObjectFromServer) {
+    constructor(tableContainerId, dataObjectFromServer, categoriesDictionary) {
         super(tableContainerId, dataObjectFromServer);
+        this.categoriesDictionary = categoriesDictionary;
         this.tableConfig = tableConfig; // global configuration object
+
     }
 
     addRow(body, rowData) {
@@ -149,12 +151,6 @@ class OutputTable extends Table {
             return;
         }
 
-        // const dispatchCallbackFunction = function(rowData) {
-        //     return function() {
-        //         ajax.dispatchDetail(areaLinked, rowData);
-        //     }
-        // }(rowData);
-
         if (this.tableConfig.idRequested) {
             cell = row.insertCell(cellId++);
             cell.innerHTML = row.rowIndex;
@@ -171,7 +167,7 @@ class OutputTable extends Table {
                 }
 
                 for (let cat of categories) {
-                    cell.innerHTML += `<span class="category" style="background-color: ${categoriesDictionary[cat.categoryId].color}">${categoriesDictionary[cat.categoryId].name}</span>`;
+                    cell.innerHTML += `<span class="category" style="background-color: ${this.categoriesDictionary[cat.categoryId].color}">${this.categoriesDictionary[cat.categoryId].name}</span>`;
                 }
 
                 continue;
@@ -236,7 +232,13 @@ class OutputTable extends Table {
                 continue;
             }
 
-            cell.innerHTML = rowData[hc.backendKey];
+            let data = rowData[hc.backendKey];
+            if (!data) {
+                cell.remove()
+                continue;
+            }
+
+            cell.innerHTML = data;
             cell.classList.add("text-centered");
 
             // if (rowData.ID !== undefined && !this.tableConfig.noRiderect) {
