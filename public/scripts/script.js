@@ -88,12 +88,9 @@ function makeDictionary(json) {
 
 
 function themeToggle() {
-    debugger;
     let checkbox = document.querySelector('input#theme-toggle');
 
     checkbox.addEventListener('change', function() {
-        debugger;
-
         if(this.checked) {
             trans()
             document.documentElement.setAttribute('data-theme', 'dark')
