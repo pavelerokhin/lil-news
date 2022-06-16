@@ -184,36 +184,8 @@ ul {
   padding: 0;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  font-family: "Helvetica 25 UltraLight", sans-serif !important;
-  font-weight: 200;
-}
-*:focus {
-  outline: none;
-}
-
-a {
-  text-decoration: none;
-}
-a:visited {
-  color: inherit;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-section {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-  width: 100%;
-}
-
-ul {
-  padding: 0;
+.rounded {
+  border-radius: 20px;
 }
 
 .toggle {
@@ -294,15 +266,63 @@ ul {
     border-radius: 0;
   }
 }
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica 25 UltraLight", sans-serif !important;
+  font-weight: 200;
+}
+*:focus {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+a:visited {
+  color: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+}
+
+ul {
+  padding: 0;
+}
+
+.rounded {
+  border-radius: 20px;
+}
+
+#terminal {
+  border-top: 1px solid #f2e9df;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+}
+
+.category {
+  border-radius: 7px;
+  margin: 2px 4px;
+  padding: 4px;
+}
+
 table {
-  width: 70%;
   border-collapse: collapse;
   overflow: hidden;
-  padding: 10px;
 }
 table tbody td {
-  padding: 8px;
-  height: 10px;
+  padding: 4px;
+  height: 8px;
 }
 table tbody td a, table tbody td a:visited {
   display: block;
@@ -314,7 +334,7 @@ table tbody td img {
   justify-content: center;
 }
 table tbody td .time {
-  margin-left: 30px;
+  margin-left: 15px;
 }
 table thead {
   height: 35px;
@@ -322,7 +342,7 @@ table thead {
 }
 table thead td {
   font-weight: 500;
-  padding: 5px;
+  padding: 2px;
   text-align: center;
 }
 table thead .arrow {
@@ -330,7 +350,7 @@ table thead .arrow {
   position: relative;
 }
 table td {
-  min-width: 70px;
+  min-width: 50px;
 }
 table td.image-centered img {
   transform: translateX(calc(50% + 5px));
@@ -371,6 +391,10 @@ ul {
   padding: 0;
 }
 
+.rounded {
+  border-radius: 20px;
+}
+
 #header {
   align-items: center;
   display: flex;
@@ -392,9 +416,7 @@ ul {
   align-items: end;
   display: flex;
   justify-content: right;
-  margin-bottom: 10px;
   position: relative;
-  height: 50px;
   width: 70%;
 }
 #menu #csv-button {
@@ -418,94 +440,48 @@ ul {
   width: 500px;
 }
 
-.category {
-  border-radius: 7px;
-  margin: 2px 4px;
-  padding: 4px;
-}
-
 .container {
+  height: 100vh;
   padding: 10px;
-}
-.container > *:not(:first-child) {
-  margin-top: 5px;
 }
 
 .error-messages {
+  position: fixed;
   width: 100%;
 }
 
-.rounded {
-  border-radius: 20px;
-}
-
-input[type=checkbox].switch_3:checked + svg.checkbox .is_checked {
-  opacity: 1;
-  -webkit-transform: translateX(0) rotate(0deg);
-  transform: translateX(0) rotate(0deg);
-}
-
-input[type=checkbox].switch_3:checked + svg.checkbox .is_unchecked {
-  opacity: 0;
-  -webkit-transform: translateX(-200%) rotate(180deg);
-  transform: translateX(-200%) rotate(180deg);
-}
-
-svg.checkbox {
-  position: absolute;
-  top: 0;
+#dashboard {
+  background-color: #191919;
+  height: 100vh;
+  position: fixed;
   right: 0;
-  bottom: 0;
-  left: 0;
+  top: 0;
+  width: 25vw;
+  z-index: 100;
+}
+
+#header {
+  height: 5vh;
+  margin-bottom: 10px;
+}
+
+#menu {
+  height: 3vh;
+  margin-bottom: 10px;
+}
+
+#table {
+  height: 55vh;
+  overflow-x: scroll;
+  width: 70vw;
+}
+#table table {
   width: 100%;
-  height: 100%;
 }
 
-svg.checkbox .is_checked {
-  opacity: 0;
-  fill: yellow;
-  -webkit-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  -webkit-transform: translateX(200%) rotate(45deg);
-  transform: translateX(200%) rotate(45deg);
-  -webkit-transition: all 0.35s;
-  transition: all 0.35s;
-}
-
-svg.checkbox .is_unchecked {
-  opacity: 1;
-  fill: #fff;
-  -webkit-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  -webkit-transform: translateX(0) rotate(0deg);
-  transform: translateX(0) rotate(0deg);
-  -webkit-transition: all 0.35s;
-  transition: all 0.35s;
-}
-
-@-webkit-keyframes animateRing {
-  to {
-    stroke-dashoffset: 0;
-    stroke: #b0aa28;
-  }
-}
-@keyframes animateRing {
-  to {
-    stroke-dashoffset: 0;
-    stroke: #b0aa28;
-  }
-}
-@-webkit-keyframes resetRing {
-  to {
-    stroke-dashoffset: 0;
-    stroke: #233043;
-  }
-}
-@keyframes resetRing {
-  to {
-    stroke-dashoffset: 0;
-    stroke: #233043;
-  }
+#terminal {
+  height: 30vh !important;
+  width: 75vw;
 }
 
 /*# sourceMappingURL=newsfeed.css.map */

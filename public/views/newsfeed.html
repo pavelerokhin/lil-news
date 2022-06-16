@@ -6,7 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>news feed</title>
-    <link rel="stylesheet" href="styles/newsfeed.css" target="_blank">
+    <link rel="stylesheet" href="styles/newsfeed.css">
+    <link rel="stylesheet" href="https://unpkg.com/jquery.terminal/css/jquery.terminal.min.css"/>
 </head>
 <body>
 <div class="container">
@@ -61,9 +62,29 @@
     <div id="table">
         <table id="output"></table>
     </div>
+    <div id="dashboard">
+
+    </div>
+    <div id="terminal">
+    </div>
 </div>
 <script src="scripts/table.js"></script>
 <script src="scripts/script.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://unpkg.com/jquery.terminal/js/jquery.terminal.min.js"></script>
+
+<script>
+    $('#terminal').terminal({
+        hello: function(what) {
+            this.echo('Hello, ' + what +
+                '. Wellcome to this terminal.');
+        }
+    }, {
+        greetings: 'My First Web Terminal'
+    });
+</script>
+
 </body>
 </html>
 {{end}}

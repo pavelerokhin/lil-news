@@ -1,0 +1,10 @@
+@import "utils";
+
+#terminal {
+    border-top: 1px solid $light-grey;
+    bottom: 0;
+//     height: 340px;
+    left: 0;
+    position: fixed;
+    width: 100%;
+}
