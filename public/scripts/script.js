@@ -1,6 +1,8 @@
 "use strict"
 
 // global vars
+var allGraphs;
+
 var categoriesDictionary;
 var data;
 
@@ -43,7 +45,7 @@ function webSocketConnect() {
         data = JSON.parse(evt.data)
         let t = new OutputTable("output", data, categoriesDictionary);
         t.createTable();
-        drawGraphs(data, categoriesDictionary);
+        allGraphs = drawGraphs(data, categoriesDictionary);
     };
 
     ws.onclose = function() {
@@ -66,7 +68,7 @@ function pingPongServerWatch(ws) {
         ws.close();
 
         addErrorMessage(message);
-        shadowTable();
+        shadowInterface();
     }
 }
 
@@ -74,8 +76,12 @@ function addErrorMessage(message) {
     document.querySelector(".error-messages").innerText += `${message}\n`
 }
 
-function shadowTable() {
+function shadowInterface() {
     document.querySelector("table#output").classList.add("shadow");
+    let gg = document.querySelectorAll("#dashboard .graph");
+    for (let g of gg) {
+        g.classList.add("shadow");
+    }
 }
 
 function getCategoriesDictionary() {
@@ -103,7 +109,6 @@ function themeToggle() {
     let checkbox = document.querySelector('input#theme-toggle');
 
     checkbox.addEventListener('change', function() {
-        debugger;
         if(this.checked) {
             setThemeDark();
         } else {
@@ -116,13 +121,12 @@ function themeToggle() {
         trans()
 
         // graphs
-        let update = {
-            "color": "#fff",
-            "font.color" : "#fff",
-        };
-        Plotly.restyle("#severity-hist", update);
-        Plotly.restyle("#category-pie", update)
-        // Plotly.restyle("locality-map", update)
+        for (let g of allGraphs) {
+            if (g["colorsDark"]) {
+                // update["marker.color"] = [g["colorsDark"]];
+                Plotly.restyle(g.idSelector, "marker.color", [g["colorsDark"]]);
+            }
+        }
     }
 
     let setThemeLight = () => {
@@ -130,13 +134,12 @@ function themeToggle() {
         trans()
 
         // graphs
-        let update = {
-            "color": "#000",
-            "font.color" : "#000",
-        };
-        Plotly.restyle("#severity-hist", update);
-        Plotly.restyle("#category-pie", update)
-        // Plotly.restyle("locality-map", update)
+        for (let g of allGraphs) {
+            if (g["colorsLight"]) {
+                // update[] = [g["colorsLight"]];
+                Plotly.restyle(g.idSelector, "marker.color", [g["colorsLight"]]);
+            }
+        }
     }
 
     let trans = () => {

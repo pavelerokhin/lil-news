@@ -27,6 +27,15 @@ $white-transparent: rgba(255,255,255,0.1);
   border-radius: 3px;
 }
 
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+    transition: ease-in-out 200ms !important;
+    transition-delay: 0 !important;
+}
+
+
 html[data-theme='light'] {
     background: $white;
     color: $black;
@@ -54,13 +63,13 @@ html[data-theme='light'] {
                 border: 1px solid $light-grey;
                 color: $black;
 
-//                 a, a:visited {
-//                     color: $red;
-//                 }
+                 a, a:visited {
+                     color: $black;
+                 }
 
-//                 a:visited {
-//                     color: $red;
-//                 }
+                img {
+                    border: 1px solid $dark-grey;
+                }
 
                 .time {
                     color: $dark-grey;
@@ -103,6 +112,11 @@ html[data-theme='light'] {
     #dashboard {
         background-color: $light-grey;
         border-left: 1px solid $black;
+        color: $black !important;
+
+        .graph * {
+            color: $black !important;
+        }
     }
 
     #header {
@@ -157,13 +171,9 @@ html[data-theme='dark'] {
                 border: 1px solid $light-grey;
                 color: $white;
 
-//                 a, a:visited {
-//                     color: $red;
-//                 }
-
-//                 a:visited {
-//                     color: $alert5;
-//                 }
+                a, a:visited {
+                    color: $white;
+                }
 
                 img {
                     border: 1px solid $light-grey;
@@ -219,6 +229,11 @@ html[data-theme='dark'] {
     #dashboard {
         background-color: $dark-grey;
         border-left: 1px solid $light-grey;
+        color: $white !important;
+
+        .graph * {
+            color: $white !important;
+        }
     }
 
     #header {

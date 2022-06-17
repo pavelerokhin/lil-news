@@ -8,6 +8,14 @@
   border-radius: 3px;
 }
 
+html.transition,
+html.transition *,
+html.transition *:before,
+html.transition *:after {
+  transition: ease-in-out 200ms !important;
+  transition-delay: 0 !important;
+}
+
 html[data-theme=light] {
   background: #fff;
   color: #000;
@@ -31,6 +39,12 @@ html[data-theme=light] table {
 html[data-theme=light] table tbody td {
   border: 1px solid #f2e9df;
   color: #000;
+}
+html[data-theme=light] table tbody td a, html[data-theme=light] table tbody td a:visited {
+  color: #000;
+}
+html[data-theme=light] table tbody td img {
+  border: 1px solid #191919;
 }
 html[data-theme=light] table tbody td .time {
   color: #191919;
@@ -60,6 +74,10 @@ html[data-theme=light] .shadow {
 html[data-theme=light] #dashboard {
   background-color: #f2e9df;
   border-left: 1px solid #000;
+  color: #000 !important;
+}
+html[data-theme=light] #dashboard * {
+  color: #000 !important;
 }
 html[data-theme=light] #header {
   background-color: #fff;
@@ -105,6 +123,9 @@ html[data-theme=dark] table tbody td {
   border: 1px solid #f2e9df;
   color: #fff;
 }
+html[data-theme=dark] table tbody td a, html[data-theme=dark] table tbody td a:visited {
+  color: #fff;
+}
 html[data-theme=dark] table tbody td img {
   border: 1px solid #f2e9df;
 }
@@ -142,6 +163,10 @@ html[data-theme=dark] .shadow {
 html[data-theme=dark] #dashboard {
   background-color: #191919;
   border-left: 1px solid #f2e9df;
+  color: #fff !important;
+}
+html[data-theme=dark] #dashboard * {
+  color: #fff !important;
 }
 html[data-theme=dark] #header {
   background-color: #191919;
@@ -422,6 +447,10 @@ table td.image-centered img {
 table td.text-centered {
   text-align: center;
 }
+table td .text-centered {
+  text-align: center;
+  width: 100%;
+}
 
 * {
   margin: 0;
@@ -513,6 +542,7 @@ ul {
 .error-messages {
   position: fixed;
   width: 100%;
+  z-index: 10000;
 }
 
 #dashboard {
@@ -525,14 +555,14 @@ ul {
 }
 
 #header {
-  height: 3vh;
+  height: 100px;
   margin-bottom: 10px;
   min-height: 70px;
   position: fixed;
 }
 
 #menu {
-  height: 3vh;
+  height: 100px;
   margin-bottom: 10px;
   min-height: 70px;
   position: fixed;
@@ -540,8 +570,9 @@ ul {
 }
 
 #table {
+  height: calc(90vh - 20px);
+  margin-top: 120px;
   overflow-y: auto;
-  padding-top: 10vh;
   width: 70vw;
 }
 #table table {
@@ -549,6 +580,7 @@ ul {
 }
 
 #terminal {
+  background-color: black;
   height: 30vh !important;
   width: 75vw;
 }

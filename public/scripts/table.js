@@ -232,6 +232,12 @@ class OutputTable extends Table {
                 continue;
             }
 
+            if (hc.isLocation) {
+                let text = rowData[hc.backendKey]
+                cell.innerHTML = `<a class="text-centered" href='https://www.openstreetmap.org/search?query=${text}' target='_blank'>${text}</a>`;
+                continue;
+            }
+
             let data = rowData[hc.backendKey];
             if (!data) {
                 cell.remove()
@@ -289,7 +295,8 @@ var tableConfig = {
         {
             backendKey: "location",
             headerCapture: "Location",
-            sortingAsc: null
+            sortingAsc: null,
+            isLocation: true
         },
         {
             backendKey: "publishDate",
