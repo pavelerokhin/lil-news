@@ -16,7 +16,6 @@ const alert1d = "#59A331",
 function drawGraphs(parsedData, categoryDictionary) {
     let categories = calcCategoryData(parsedData, categoryDictionary);
     let severity = calcSeverityData(parsedData);
-    debugger;
     let isDark = document.documentElement.dataset.theme === "dark";
 
     let dataHist = [{
@@ -24,22 +23,21 @@ function drawGraphs(parsedData, categoryDictionary) {
         y: severity.values,
         type: 'bar'
     }];
-    drawHist(dataHist, isDark);
+    let hist = drawHist("severity-hist", dataHist, isDark);
 
     let dataPie = [{
         automargin: true,
         labels: categories.labels,
-        marker: {
-            colors: categories.colors,
-        },
         textinfo: "label+percent",
         textposition: "outside",
         type: "pie",
         values: categories.values,
     }];
-    drawPie(dataPie, isDark);
+    let pie = drawPie("category-pie", dataPie, categories, isDark);
 
     // drawMap()
+
+    return [hist, pie]
 }
 function calcCategoryData(parsedData, categoryDictionary){
     const colors = [];
@@ -85,8 +83,9 @@ function calcSeverityData(parsedData){
     return {labels: labels, values: values};
 }
 
-function drawHist(data, itDarkTheme=false) {
-    let colors;
+function drawHist(idSelector, data, itDarkTheme=false) {
+    const colorsLight = [alert1, alert2, alert3, alert4, alert5],
+          colorsDark = [alert1d, alert2d, alert3d, alert4d, alert5d];
     let layout_hist = {
         paper_bgcolor: "transparent",
         plot_bgcolor: "transparent",
@@ -94,24 +93,29 @@ function drawHist(data, itDarkTheme=false) {
 
     }
     if (itDarkTheme) {
-        colors = [alert1d, alert2d, alert3d, alert4d, alert5d]
         layout_hist.color = "#fff";
         layout_hist.font = {color : "#fff"};
+        data[0].marker = {
+            color: colorsDark,
+        };
     } else {
-        colors = [alert1, alert2, alert3, alert4, alert5]
         layout_hist.color = "#000";
         layout_hist.font = {color : "#000"};
+        data[0].marker = {
+            color: colorsLight,
+        };
     }
+    let p = Plotly.newPlot(idSelector, data, layout_hist, {displaylogo: false});
+    p["colorsDark"] = colorsDark;
+    p["colorsLight"] = colorsLight;
+    p.idSelector = idSelector;
 
-    data[0].marker = {
-        color: colors,
-    };
-    Plotly.newPlot('severity-hist', data, layout_hist);
+    return p;
 }
 
 
 //pie
-function drawPie(data, itDarkTheme=false) {
+function drawPie(idSelector, data, categories, itDarkTheme=false) {
     let layout_pie = {
         height: 400,
         margin: {"t": 55, "b": 55, "l": 20, "r": 20},
@@ -129,7 +133,13 @@ function drawPie(data, itDarkTheme=false) {
         layout_pie.font.font = {color : "#000"};
     }
 
-    Plotly.newPlot('category-pie', data, layout_pie)
+    data[0].marker = {
+        colors: categories.colors,
+    };
+    let p = Plotly.newPlot(idSelector, data, layout_pie, {displaylogo: false})
+    p.idSelector = idSelector;
+
+    return p;
 }
 
 

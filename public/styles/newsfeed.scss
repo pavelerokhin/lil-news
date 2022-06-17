@@ -17,6 +17,7 @@
 .error-messages {
     position: fixed;
     width: 100%;
+    z-index: 10000;
 }
 
 #dashboard {
@@ -29,24 +30,27 @@
     z-index: 100;
 }
 
+$menu-header-height: 100px;
 #header {
-    height: 3vh;
+    height: $menu-header-height;
     margin-bottom: 10px;
     min-height: 70px;
     position: fixed;
 }
 
 #menu {
-    height: 3vh;
+    height: $menu-header-height;
     margin-bottom: 10px;
     min-height: 70px;
     position: fixed;
     padding-bottom: 10px;
 }
 
+$terminal-height: 10vh;
 #table {
+    height: calc(100vh - $terminal-height - 20px);
+    margin-top: calc($menu-header-height + 20px); // hack
     overflow-y: auto;
-    padding-top: 10vh; // hack
     width: 70vw;
 
     table {
@@ -55,6 +59,7 @@
 }
 
 #terminal {
+    background-color: black;
     height: 30vh !important;
     width: 75vw;
 }
