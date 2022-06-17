@@ -1,5 +1,5 @@
 {{define "newsfeed"}}
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,6 +8,7 @@
     <title>news feed</title>
     <link rel="stylesheet" href="styles/newsfeed.css">
     <link rel="stylesheet" href="https://unpkg.com/jquery.terminal/css/jquery.terminal.min.css"/>
+    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -43,7 +44,7 @@
 <!--        <label for="theme-toggle">Dark theme</label>-->
 
         <label class="toggle" for="theme-toggle">
-            <input type="checkbox" class="toggle__input" id="theme-toggle" />
+            <input type="checkbox" checked class="toggle__input" id="theme-toggle" />
             <span class="toggle-track">
                 <span class="toggle-indicator">
                     <!-- 	This check mark is optional	 -->
@@ -63,13 +64,17 @@
         <table id="output"></table>
     </div>
     <div id="dashboard">
-
+        <div id="severity-hist" class="graph"></div>
+        <div id="category-pie" class="graph"></div>
+        <div id="locality-map" class="graph"></div>
     </div>
     <div id="terminal">
     </div>
 </div>
 <script src="scripts/table.js"></script>
 <script src="scripts/script.js"></script>
+<script src="scripts/graph.js"></script>
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://unpkg.com/jquery.terminal/js/jquery.terminal.min.js"></script>

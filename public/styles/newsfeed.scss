@@ -4,10 +4,9 @@
 @import "theme_switch";
 
 @import "terminal";
+@import "graph";
 @import "table";
 @import "header-menu";
-
-
 
 
 .container {
@@ -21,7 +20,7 @@
 }
 
 #dashboard {
-    background-color: $dark-grey;
+    //background-color: $dark-grey;
     height: 100vh;
     position: fixed;
     right: 0;
@@ -31,18 +30,23 @@
 }
 
 #header {
-    height: 5vh;
+    height: 3vh;
     margin-bottom: 10px;
+    min-height: 70px;
+    position: fixed;
 }
 
 #menu {
     height: 3vh;
     margin-bottom: 10px;
+    min-height: 70px;
+    position: fixed;
+    padding-bottom: 10px;
 }
 
 #table {
-    height: 55vh;
-    overflow-x: scroll;
+    overflow-y: auto;
+    padding-top: 10vh; // hack
     width: 70vw;
 
     table {
