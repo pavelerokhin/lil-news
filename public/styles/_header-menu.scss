@@ -4,7 +4,7 @@
     align-items: center;
     display: flex;
     justify-content: flex-start;
-//     padding-top: 20px;
+    z-index: 100;
 
     h1 {
         font-size: 23px;
@@ -26,9 +26,7 @@ $menu-elements-height: 27px;
     align-items: end;
     display: flex;
     justify-content: right;
-//     margin-bottom: 12px;
     position: relative;
-//     height: 30px;
     width: 70%;
 
     #csv-button {

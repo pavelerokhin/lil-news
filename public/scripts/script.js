@@ -1,15 +1,20 @@
 "use strict"
 
+// global vars
+var categoriesDictionary;
+var data;
+
 var ping, pingWatch
 var pingBalance = 0;
 
+
 window.onload = () => {
-    let categoriesDictionary = getCategoriesDictionary();
+    categoriesDictionary = getCategoriesDictionary();
     webSocketConnect(categoriesDictionary);
     themeToggle();
 }
 
-function webSocketConnect(categoriesDictionary) {
+function webSocketConnect() {
     let loc = window.location;
     let uri = "ws:";
 
@@ -35,9 +40,10 @@ function webSocketConnect(categoriesDictionary) {
             pingBalance--;
             return
         }
-
-        let t = new OutputTable("output", JSON.parse(evt.data), categoriesDictionary);
+        data = JSON.parse(evt.data)
+        let t = new OutputTable("output", data, categoriesDictionary);
         t.createTable();
+        drawGraphs(data, categoriesDictionary);
     };
 
     ws.onclose = function() {
@@ -84,7 +90,6 @@ function getCategoriesDictionary() {
     return null
 }
 
-
 function makeDictionary(json) {
     let categoriesDictionary = {}
     for(let j of json) {
@@ -98,14 +103,41 @@ function themeToggle() {
     let checkbox = document.querySelector('input#theme-toggle');
 
     checkbox.addEventListener('change', function() {
+        debugger;
         if(this.checked) {
-            trans()
-            document.documentElement.setAttribute('data-theme', 'dark')
+            setThemeDark();
         } else {
-            trans()
-            document.documentElement.setAttribute('data-theme', 'light')
+            setThemeLight();
         }
     })
+
+    let setThemeDark = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        trans()
+
+        // graphs
+        let update = {
+            "color": "#fff",
+            "font.color" : "#fff",
+        };
+        Plotly.restyle("#severity-hist", update);
+        Plotly.restyle("#category-pie", update)
+        // Plotly.restyle("locality-map", update)
+    }
+
+    let setThemeLight = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        trans()
+
+        // graphs
+        let update = {
+            "color": "#000",
+            "font.color" : "#000",
+        };
+        Plotly.restyle("#severity-hist", update);
+        Plotly.restyle("#category-pie", update)
+        // Plotly.restyle("locality-map", update)
+    }
 
     let trans = () => {
         document.documentElement.classList.add('transition');
