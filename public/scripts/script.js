@@ -14,6 +14,7 @@ window.onload = () => {
     categoriesDictionary = getCategoriesDictionary();
     webSocketConnect(categoriesDictionary);
     themeToggle();
+    loadTerminal();
 }
 
 function webSocketConnect() {
@@ -28,8 +29,10 @@ function webSocketConnect() {
     let ws = new WebSocket(uri);
 
     ping = setInterval(function() {
-        ws.send('ping');
-        pingBalance++;
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send('ping');
+            pingBalance++;
+        }
     }, 2000);
 
     ws.onopen = function () {
@@ -37,7 +40,6 @@ function webSocketConnect() {
     };
 
     ws.onmessage = function (evt) {
-
         if (evt.data === "pong") {
             pingBalance--;
             return
@@ -65,7 +67,9 @@ function pingPongServerWatch(ws) {
         console.warn(message);
         clearInterval(ping);
         clearInterval(pingWatch);
-        ws.close();
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.close();
+        }
 
         addErrorMessage(message);
         shadowInterface();
